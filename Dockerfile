@@ -5,7 +5,7 @@ MAINTAINER Nebo#15 support@nebo15.com
 
 # Configure environment variables and other settings
 ENV MIX_ENV=prod \
-    APP_NAME=ops_api \
+    APP_NAME=ops \
     APP_PORT=4000
 
 WORKDIR ${HOME}

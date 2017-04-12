@@ -5,13 +5,13 @@ config :ex_unit, capture_log: true
 
 
 # Configure your database
-config :ops_api, OPS.Repo,
+config :ops, OPS.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
-  database: {:system, "DB_NAME", "ops_api_test"}
+  database: {:system, "DB_NAME", "ops_test"}
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :ops_api, OPS.Web.Endpoint,
+config :ops, OPS.Web.Endpoint,
   http: [port: 4001],
   server: true
 
@@ -19,4 +19,4 @@ config :ops_api, OPS.Web.Endpoint,
 config :logger, level: :warn
 
 # Run acceptance test in concurrent mode
-config :ops_api, sql_sandbox: true
+config :ops, sql_sandbox: true

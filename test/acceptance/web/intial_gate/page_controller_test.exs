@@ -1,7 +1,7 @@
 defmodule OPS.Web.Controllers.PageAcceptanceTest do
   use EView.AcceptanceCase,
     async: true,
-    otp_app: :ops_api,
+    otp_app: :ops,
     endpoint: OPS.Web.Endpoint,
     repo: OPS.Repo,
     headers: [{"content-type", "application/json"}]

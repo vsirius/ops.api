@@ -9,7 +9,7 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :ops_api, OPS.Web.Endpoint,
+config :ops, OPS.Web.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,

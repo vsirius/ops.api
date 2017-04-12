@@ -6,24 +6,24 @@
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add `ops_api` to your list of dependencies in `mix.exs`:
+  1. Add `ops` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
-      [{:ops_api, "~> 0.1.0"}]
+      [{:ops, "~> 0.1.0"}]
     end
     ```
 
-  2. Ensure `ops_api` is started before your application:
+  2. Ensure `ops` is started before your application:
 
     ```elixir
     def application do
-      [applications: [:ops_api]]
+      [applications: [:ops]]
     end
     ```
 
 If [published on HexDocs](https://hex.pm/docs/tasks#hex_docs), the docs can
-be found at [https://hexdocs.pm/ops_api](https://hexdocs.pm/ops_api)
+be found at [https://hexdocs.pm/ops](https://hexdocs.pm/ops)
 
 
 # Phoenix App

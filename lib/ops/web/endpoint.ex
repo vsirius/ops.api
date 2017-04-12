@@ -1,11 +1,11 @@
 defmodule OPS.Web.Endpoint do
   @moduledoc """
-  Phoenix Endpoint for ops_api application.
+  Phoenix Endpoint for ops application.
   """
-  use Phoenix.Endpoint, otp_app: :ops_api
+  use Phoenix.Endpoint, otp_app: :ops
 
   # Allow acceptance tests to run in concurrent mode
-  if Application.get_env(:ops_api, :sql_sandbox) do
+  if Application.get_env(:ops, :sql_sandbox) do
     plug Phoenix.Ecto.SQL.Sandbox
   end
 

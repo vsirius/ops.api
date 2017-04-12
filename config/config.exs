@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :ops_api, key: :value
+#     config :ops, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:ops_api, :key)
+#     Application.get_env(:ops, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -23,13 +23,13 @@ use Mix.Config
 # Or read environment variables in runtime (!) as:
 #
 #     :var_name, "${ENV_VAR_NAME}"
-config :ops_api,
+config :ops,
   ecto_repos: [OPS.Repo]
 
 # Configure your database
-config :ops_api, OPS.Repo,
+config :ops, OPS.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: {:system, "DB_NAME", "ops_api_dev"},
+  database: {:system, "DB_NAME", "ops_dev"},
   username: {:system, "DB_USER", "postgres"},
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
@@ -39,11 +39,11 @@ config :ops_api, OPS.Repo,
 
 # General application configuration
 
-config :ops_api,
+config :ops,
   namespace: OPS
 
 # Configures the endpoint
-config :ops_api, OPS.Web.Endpoint,
+config :ops, OPS.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "4LcL78vtzM1yVeVCuY1351HuU/62qpTtDKykdJxAKKgwnTtH5JzkXNEUouzDBc1D",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]

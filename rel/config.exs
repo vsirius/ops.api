@@ -14,9 +14,9 @@ environment :default do
   set cookie: cookie
 end
 
-release :ops_api do
-  set version: current_version(:ops_api)
+release :ops do
+  set version: current_version(:ops)
   set applications: [
-    ops_api: :permanent
+    ops: :permanent
   ]
 end

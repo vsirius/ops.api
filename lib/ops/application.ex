@@ -1,6 +1,6 @@
 defmodule OPS do
   @moduledoc """
-  This is an entry point of ops_api application.
+  This is an entry point of ops application.
   """
   use Application
 

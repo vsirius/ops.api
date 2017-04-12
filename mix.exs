@@ -4,7 +4,7 @@ defmodule OPS.Mixfile do
   @version "0.1.0"
 
   def project do
-    [app: :ops_api,
+    [app: :ops,
      description: "Add description to your package.",
      package: package(),
      version: @version,

@@ -1,6 +1,6 @@
 #!/bin/sh
-# `pwd` should be /opt/ops_api
-APP_NAME="ops_api"
+# `pwd` should be /opt/ops
+APP_NAME="ops"
 
 if [ "${DB_MIGRATE}" == "true" ]; then
   echo "[WARNING] Migrating database!"
