@@ -18,8 +18,8 @@ defmodule OPS.Declaration do
     field :confident_person_id, Ecto.UUID
     field :active, :boolean, default: false
 
-    belongs_to :doctor, OPS.Doctor, type: Ecto.UUID
-    belongs_to :msp, OPS.MSP, type: Ecto.UUID
+    belongs_to :doctor, Ecto.UUID
+    belongs_to :msp, Ecto.UUID
 
     timestamps(type: :utc_datetime)
   end
@@ -49,7 +49,5 @@ defmodule OPS.Declaration do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @fields)
-    |> foreign_key_constraint(:doctor_id)
-    |> foreign_key_constraint(:msp_id)
   end
 end
