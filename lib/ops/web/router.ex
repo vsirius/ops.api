@@ -24,6 +24,7 @@ defmodule OPS.Web.Router do
   scope "/", OPS.Web do
     pipe_through :api
 
-    get "/page", PageController, :index
+    resources "/declarations", DeclarationController
+    get "/reports/declarations", DeclarationReportController, :declarations
   end
 end
