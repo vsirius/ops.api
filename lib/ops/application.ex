@@ -3,6 +3,7 @@ defmodule OPS do
   This is an entry point of ops application.
   """
   use Application
+  alias OPS.Web.Endpoint
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -28,7 +29,7 @@ defmodule OPS do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    OPS.Web.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 
