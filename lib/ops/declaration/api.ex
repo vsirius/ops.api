@@ -53,31 +53,47 @@ defmodule OPS.DeclarationAPI do
 
   defp declaration_changeset(%Declaration{} = declaration, attrs) do
     fields = ~W(
-      patient_id
+      declaration_signed_id
+      employee_id
+      person_id
       start_date
       end_date
-      signature
-      certificate
       status
       signed_at
       created_by
       updated_by
-      confident_person_id
-      active
-      doctor_id
-      msp_id
+      is_active
+      scope
+      division_id
+      legal_entity_id
     )
+
+    required_fields = [
+      :declaration_signed_id,
+      :employee_id,
+      :person_id,
+      :start_date,
+      :end_date,
+      :status,
+      :signed_at,
+      :created_by,
+      :updated_by,
+      :is_active,
+      :scope,
+      :division_id,
+      :legal_entity_id,
+    ]
 
     declaration
     |> cast(attrs, fields)
+    |> validate_required(required_fields)
   end
 
   defp declaration_search_changeset(%Declaration{} = declaration, attrs) do
     fields = [
-      :patient_id,
-      :active,
-      :doctor_id,
-      :msp_id
+      :person_id,
+      :is_active,
+      :employee_id,
     ]
 
     declaration

@@ -14,13 +14,13 @@ defmodule OPS.Declaration.Report do
                  count(case when DATE(inserted_at) = day then 1 end) as created,
                  count(case when status = 'closed' and DATE(updated_at) = day then 1 end) as closed,
                  count(case when status != 'closed' and DATE(inserted_at) <= day then 1 end) as total
-            FROM declarations
+            FROM declaration
       RIGHT JOIN (
                    SELECT date_trunc('day', series)::date AS day
                    FROM generate_series('#{start_date}'::timestamp, '#{end_date}'::timestamp, '1 day'::interval) series
                  ) days ON
-                           doctor_id = '#{get_change(changeset, :doctor_id)}' AND
-                           msp_id = '#{get_change(changeset, :msp_id)}' AND
+                           employee_id = '#{get_change(changeset, :employee_id)}' AND
+                           legal_entity_id = '#{get_change(changeset, :legal_entity_id)}' AND
                            inserted_at::date BETWEEN DATE('#{start_date}') AND DATE('#{end_date}')
         GROUP BY days.day
         ORDER BY days.day;
@@ -50,14 +50,12 @@ defmodule OPS.Declaration.Report do
     types = %{
       start_date: :date,
       end_date: :date,
-      msp_id: Ecto.UUID,
-      doctor_id: Ecto.UUID,
+      employee_id: Ecto.UUID,
     }
     required_fields = [
       :start_date,
       :end_date,
-      :msp_id,
-      :doctor_id,
+      :employee_id,
     ]
 
     {data, types}

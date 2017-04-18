@@ -5,42 +5,47 @@ defmodule OPS.DeclarationAPITest do
   alias OPS.Declaration
 
   @create_attrs %{
-    patient_id: Ecto.UUID.generate(),
-    start_date: "2016-10-10 23:50:07.000000",
-    end_date: "2016-12-07 23:50:07.000000",
-    signature: "some_signrature_string",
-    certificate: "some_certificate_string",
+    declaration_signed_id: Ecto.UUID.generate(),
+    employee_id: "employee_id",
+    person_id: "person_id",
+    start_date: "2016-10-10",
+    end_date: "2016-12-07",
     status: "some_status_string",
     signed_at: "2016-10-09 23:50:07.000000",
-    created_by: "some_author_identifier",
-    updated_by: "some_editor_identifier",
-    confident_person_id: Ecto.UUID.generate(),
-    active: true
+    created_by: Ecto.UUID.generate(),
+    updated_by: Ecto.UUID.generate(),
+    is_active: true,
+    scope: "some_scope_string",
+    division_id: Ecto.UUID.generate(),
+    legal_entity_id: "legal_entity_id",
   }
 
   @update_attrs %{
-    patient_id: Ecto.UUID.generate(),
-    start_date: "2016-10-11 23:50:07.000000",
-    end_date: "2016-12-09 23:50:07.000000",
-    signature: "some_updated_signrature_string",
-    certificate: "some_updated_certificate_string",
-    status: "some_updated_status_string",
+    declaration_signed_id: Ecto.UUID.generate(),
+    employee_id: "updated_employee_id",
+    person_id: "updated_person_id",
+    start_date: "2016-10-11",
+    end_date: "2016-12-08",
+    status: "updated_status",
     signed_at: "2016-10-10 23:50:07.000000",
-    created_by: "some_updated_author_identifier",
-    updated_by: "some_updated_editor_identifier",
-    confident_person_id: Ecto.UUID.generate(),
-    active: false
+    created_by: Ecto.UUID.generate(),
+    updated_by: Ecto.UUID.generate(),
+    is_active: false,
+    scope: "some_updated_scope_string",
+    division_id: Ecto.UUID.generate(),
+    legal_entity_id: "updated_legal_entity_id",
   }
 
-  # TODO: unmark pending test cases below
-  @invalid_attrs %{
-  }
+   @invalid_attrs %{
+     division_id: "invalid"
+   }
 
   def fixture(:declaration, attrs \\ @create_attrs) do
     create_attrs =
       attrs
-      |> Map.put_new(:doctor_id, Ecto.UUID.generate())
-      |> Map.put_new(:msp_id, Ecto.UUID.generate())
+      |> Map.put(:employee_id, Ecto.UUID.generate())
+      |> Map.put(:legal_entity_id, Ecto.UUID.generate())
+
 
     {:ok, declaration} = DeclarationAPI.create_declaration(create_attrs)
     declaration
@@ -59,24 +64,22 @@ defmodule OPS.DeclarationAPITest do
   test "create_declaration/1 with valid data creates a declaration" do
     create_attrs =
       @create_attrs
-      |> Map.put_new(:doctor_id, Ecto.UUID.generate())
-      |> Map.put_new(:msp_id, Ecto.UUID.generate())
+      |> Map.put(:employee_id, Ecto.UUID.generate())
+      |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
     assert {:ok, %Declaration{} = declaration} = DeclarationAPI.create_declaration(create_attrs)
 
-    assert declaration.patient_id == create_attrs.patient_id
+    assert declaration.person_id == "person_id"
     assert declaration.start_date
     assert declaration.end_date
-    assert declaration.signature == "some_signrature_string"
-    assert declaration.certificate == "some_certificate_string"
     assert declaration.status == "some_status_string"
+    assert declaration.scope == "some_scope_string"
     assert declaration.signed_at
-    assert declaration.created_by == "some_author_identifier"
-    assert declaration.updated_by == "some_editor_identifier"
-    assert declaration.confident_person_id == create_attrs.confident_person_id
-    assert declaration.active
-    assert declaration.doctor_id == create_attrs.doctor_id
-    assert declaration.msp_id == create_attrs.msp_id
+    assert declaration.created_by == create_attrs.created_by
+    assert declaration.updated_by == create_attrs.updated_by
+    assert declaration.is_active
+    assert declaration.employee_id == create_attrs.employee_id
+    assert declaration.legal_entity_id == create_attrs.legal_entity_id
   end
 
   @tag pending: true
@@ -89,26 +92,23 @@ defmodule OPS.DeclarationAPITest do
     assert {:ok, declaration} = DeclarationAPI.update_declaration(declaration, @update_attrs)
     assert %Declaration{} = declaration
 
-    assert declaration.patient_id == @update_attrs.patient_id
+    assert declaration.person_id == "updated_person_id"
     assert declaration.start_date
     assert declaration.end_date
-    assert declaration.signature == "some_updated_signrature_string"
-    assert declaration.certificate == "some_updated_certificate_string"
-    assert declaration.status == "some_updated_status_string"
+    assert declaration.status == "updated_status"
+    assert declaration.scope == "some_updated_scope_string"
     assert declaration.signed_at
-    assert declaration.created_by == "some_updated_author_identifier"
-    assert declaration.updated_by == "some_updated_editor_identifier"
-    assert declaration.confident_person_id == @update_attrs.confident_person_id
-    refute declaration.active
-    assert declaration.doctor_id
-    assert declaration.msp_id
+    assert declaration.created_by == @update_attrs.created_by
+    assert declaration.updated_by == @update_attrs.updated_by
+    refute declaration.is_active
+    assert declaration.employee_id == "updated_employee_id"
+    assert declaration.legal_entity_id == @update_attrs.legal_entity_id
   end
 
-  @tag pending: true
   test "update_declaration/2 with invalid data returns error changeset" do
     declaration = fixture(:declaration)
     assert {:error, %Ecto.Changeset{}} = DeclarationAPI.update_declaration(declaration, @invalid_attrs)
-    assert declaration == API.get_declaration!(declaration.id)
+    assert declaration == DeclarationAPI.get_declaration!(declaration.id)
   end
 
   test "delete_declaration/1 deletes the declaration" do
