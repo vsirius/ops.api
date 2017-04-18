@@ -87,6 +87,8 @@ defmodule OPS.DeclarationAPI do
     declaration
     |> cast(attrs, fields)
     |> validate_required(required_fields)
+    |> validate_inclusion(:scope, ["family_doctor"])
+    |> validate_inclusion(:status, ["active", "closed"])
   end
 
   defp declaration_search_changeset(%Declaration{} = declaration, attrs) do

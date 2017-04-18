@@ -14,7 +14,7 @@ defmodule OPS.Declaration.Report do
                  count(case when DATE(inserted_at) = day then 1 end) as created,
                  count(case when status = 'closed' and DATE(updated_at) = day then 1 end) as closed,
                  count(case when status != 'closed' and DATE(inserted_at) <= day then 1 end) as total
-            FROM declaration
+            FROM declarations
       RIGHT JOIN (
                    SELECT date_trunc('day', series)::date AS day
                    FROM generate_series('#{start_date}'::timestamp, '#{end_date}'::timestamp, '1 day'::interval) series

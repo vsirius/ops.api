@@ -10,12 +10,12 @@ defmodule OPS.DeclarationAPITest do
     person_id: "person_id",
     start_date: "2016-10-10",
     end_date: "2016-12-07",
-    status: "some_status_string",
+    status: "active",
     signed_at: "2016-10-09 23:50:07.000000",
     created_by: Ecto.UUID.generate(),
     updated_by: Ecto.UUID.generate(),
     is_active: true,
-    scope: "some_scope_string",
+    scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
     legal_entity_id: "legal_entity_id",
   }
@@ -26,12 +26,12 @@ defmodule OPS.DeclarationAPITest do
     person_id: "updated_person_id",
     start_date: "2016-10-11",
     end_date: "2016-12-08",
-    status: "updated_status",
+    status: "closed",
     signed_at: "2016-10-10 23:50:07.000000",
     created_by: Ecto.UUID.generate(),
     updated_by: Ecto.UUID.generate(),
     is_active: false,
-    scope: "some_updated_scope_string",
+    scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
     legal_entity_id: "updated_legal_entity_id",
   }
@@ -72,8 +72,8 @@ defmodule OPS.DeclarationAPITest do
     assert declaration.person_id == "person_id"
     assert declaration.start_date
     assert declaration.end_date
-    assert declaration.status == "some_status_string"
-    assert declaration.scope == "some_scope_string"
+    assert declaration.status == "active"
+    assert declaration.scope == "family_doctor"
     assert declaration.signed_at
     assert declaration.created_by == create_attrs.created_by
     assert declaration.updated_by == create_attrs.updated_by
@@ -95,8 +95,8 @@ defmodule OPS.DeclarationAPITest do
     assert declaration.person_id == "updated_person_id"
     assert declaration.start_date
     assert declaration.end_date
-    assert declaration.status == "updated_status"
-    assert declaration.scope == "some_updated_scope_string"
+    assert declaration.status == "closed"
+    assert declaration.scope == "family_doctor"
     assert declaration.signed_at
     assert declaration.created_by == @update_attrs.created_by
     assert declaration.updated_by == @update_attrs.updated_by
