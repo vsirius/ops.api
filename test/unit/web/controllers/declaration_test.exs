@@ -5,41 +5,46 @@ defmodule OPS.Web.DeclarationControllerTest do
   alias OPS.Declaration
 
   @create_attrs %{
-    patient_id: Ecto.UUID.generate(),
-    start_date: "2016-10-10 23:50:07.000000",
-    end_date: "2016-12-07 23:50:07.000000",
-    signature: "some_signrature_string",
-    certificate: "some_certificate_string",
-    status: "some_status_string",
+    declaration_signed_id: Ecto.UUID.generate(),
+    employee_id: "employee_id",
+    person_id: "person_id",
+    start_date: "2016-10-10",
+    end_date: "2016-12-07",
+    status: "active",
     signed_at: "2016-10-09 23:50:07.000000",
-    created_by: "some_author_identifier",
-    updated_by: "some_editor_identifier",
-    confident_person_id: Ecto.UUID.generate(),
-    active: true
+    created_by: Ecto.UUID.generate(),
+    updated_by: Ecto.UUID.generate(),
+    is_active: true,
+    scope: "family_doctor",
+    division_id: Ecto.UUID.generate(),
+    legal_entity_id: "legal_entity_id",
   }
 
   @update_attrs %{
-    patient_id: Ecto.UUID.generate(),
-    start_date: "2016-10-11 23:50:07.000000",
-    end_date: "2016-12-09 23:50:07.000000",
-    signature: "some_updated_signrature_string",
-    certificate: "some_updated_certificate_string",
-    status: "some_updated_status_string",
+    declaration_signed_id: Ecto.UUID.generate(),
+    employee_id: "updated_employee_id",
+    person_id: "updated_person_id",
+    start_date: "2016-10-11",
+    end_date: "2016-12-08",
+    status: "closed",
     signed_at: "2016-10-10 23:50:07.000000",
-    created_by: "some_updated_author_identifier",
-    updated_by: "some_updated_editor_identifier",
-    confident_person_id: Ecto.UUID.generate(),
-    active: false
+    created_by: Ecto.UUID.generate(),
+    updated_by: Ecto.UUID.generate(),
+    is_active: false,
+    scope: "family_doctor",
+    division_id: Ecto.UUID.generate(),
+    legal_entity_id: "updated_legal_entity_id",
   }
 
-  # TODO: uncomment this along with pending tests below
-  # @invalid_attrs %{}
+   @invalid_attrs %{
+     division_id: "invalid"
+   }
 
   def fixture(:declaration) do
     create_attrs =
       @create_attrs
-      |> Map.put_new(:doctor_id, Ecto.UUID.generate())
-      |> Map.put_new(:msp_id, Ecto.UUID.generate())
+      |> Map.put(:employee_id, Ecto.UUID.generate())
+      |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
     {:ok, declaration} = DeclarationAPI.create_declaration(create_attrs)
     declaration
@@ -55,46 +60,41 @@ defmodule OPS.Web.DeclarationControllerTest do
   end
 
   test "searches entries", %{conn: conn} do
-    %{doctor_id: doctor_id_1} = fixture(:declaration)
-    %{doctor_id: doctor_id_2} = fixture(:declaration)
+    %{employee_id: doctor_id_1} = fixture(:declaration)
+    %{employee_id: doctor_id_2} = fixture(:declaration)
 
-    conn = get conn, declaration_path(conn, :index) <> "?doctor_id=#{doctor_id_1}"
+    conn = get conn, declaration_path(conn, :index) <> "?employee_id=#{doctor_id_1}"
 
     assert [resp_declaration] = json_response(conn, 200)["data"]
-    assert doctor_id_1 == resp_declaration["doctor_id"]
-    refute doctor_id_2 == resp_declaration["doctor_id"]
+    assert doctor_id_1 == resp_declaration["employee_id"]
+    refute doctor_id_2 == resp_declaration["employee_id"]
   end
 
   test "returns errors when searching entries", %{conn: conn} do
-    conn = get conn, declaration_path(conn, :index) <> "?doctor_id=nil"
-
+    conn = get conn, declaration_path(conn, :index) <> "?created_by=nil"
     assert json_response(conn, 422)["error"]
   end
 
   test "creates declaration and renders declaration when data is valid", %{conn: conn} do
-    create_attrs =
-      @create_attrs
-      |> Map.put_new(:doctor_id, Ecto.UUID.generate())
-      |> Map.put_new(:msp_id, Ecto.UUID.generate())
-
-    conn = post conn, declaration_path(conn, :create), declaration: create_attrs
-    assert %{"id" => id} = json_response(conn, 201)["data"]
+    conn = post conn, declaration_path(conn, :create), declaration: @create_attrs
+    assert %{"id" => id, "inserted_at" => inserted_at, "updated_at" => updated_at} = json_response(conn, 201)["data"]
 
     conn = get conn, declaration_path(conn, :show, id)
     assert json_response(conn, 200)["data"] == %{
       "id" => id,
-      "patient_id" => create_attrs.patient_id,
-      "start_date" => "2016-10-10T23:50:07.000000Z",
-      "end_date" => "2016-12-07T23:50:07.000000Z",
-      "signature" => "some_signrature_string",
-      "certificate" => "some_certificate_string",
-      "status" => "some_status_string",
+      "person_id" => "person_id",
+      "employee_id" => "employee_id",
+      "division_id" => @create_attrs.division_id,
+      "legal_entity_id" => "legal_entity_id",
+      "scope" => "family_doctor",
+      "start_date" => "2016-10-10",
+      "end_date" => "2016-12-07",
       "signed_at" => "2016-10-09T23:50:07.000000Z",
-      "created_by" => "some_author_identifier",
-      "updated_by" => "some_editor_identifier",
-      "confident_person_id" => create_attrs.confident_person_id,
-      "doctor_id" => create_attrs.doctor_id,
-      "msp_id" => create_attrs.msp_id,
+      "status" => "active",
+      "inserted_at" => inserted_at,
+      "created_by" => @create_attrs.created_by,
+      "updated_at" => updated_at,
+      "updated_by" => @create_attrs.updated_by,
       "type" => "declaration"
     }
   end
@@ -108,23 +108,24 @@ defmodule OPS.Web.DeclarationControllerTest do
   test "updates chosen declaration and renders declaration when data is valid", %{conn: conn} do
     %Declaration{id: id} = declaration = fixture(:declaration)
     conn = put conn, declaration_path(conn, :update, declaration), declaration: @update_attrs
-    assert %{"id" => ^id} = json_response(conn, 200)["data"]
+    assert %{"id" => ^id, "inserted_at" => inserted_at, "updated_at" => updated_at} = json_response(conn, 200)["data"]
 
     conn = get conn, declaration_path(conn, :show, id)
     assert json_response(conn, 200)["data"] == %{
       "id" => id,
-      "patient_id" => @update_attrs.patient_id,
-      "start_date" => "2016-10-11T23:50:07.000000Z",
-      "end_date" => "2016-12-09T23:50:07.000000Z",
-      "signature" => "some_updated_signrature_string",
-      "certificate" => "some_updated_certificate_string",
-      "status" => "some_updated_status_string",
+      "person_id" => "updated_person_id",
+      "employee_id" => "updated_employee_id",
+      "division_id" => @update_attrs.division_id,
+      "legal_entity_id" => "updated_legal_entity_id",
+      "scope" => "family_doctor",
+      "start_date" => "2016-10-11",
+      "end_date" => "2016-12-08",
       "signed_at" => "2016-10-10T23:50:07.000000Z",
-      "created_by" => "some_updated_author_identifier",
-      "updated_by" => "some_updated_editor_identifier",
-      "confident_person_id" => @update_attrs.confident_person_id,
-      "doctor_id" => declaration.doctor_id,
-      "msp_id" => declaration.msp_id,
+      "status" => "closed",
+      "inserted_at" => inserted_at,
+      "created_by" => @update_attrs.created_by,
+      "updated_at" => updated_at,
+      "updated_by" => @update_attrs.updated_by,
       "type" => "declaration"
     }
   end

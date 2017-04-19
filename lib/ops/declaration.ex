@@ -6,48 +6,20 @@ defmodule OPS.Declaration do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "declarations" do
-    field :patient_id, Ecto.UUID
-    field :start_date, :utc_datetime
-    field :end_date, :utc_datetime
-    field :signature, :string
-    field :certificate, :string
+    field :declaration_signed_id, Ecto.UUID
+    field :employee_id, :string
+    field :person_id, :string
+    field :start_date, :date
+    field :end_date, :date
     field :status, :string
     field :signed_at, :utc_datetime
-    field :created_by, :string
-    field :updated_by, :string
-    field :confident_person_id, Ecto.UUID
-    field :active, :boolean, default: false
-
-    belongs_to :doctor, Ecto.UUID
-    belongs_to :msp, Ecto.UUID
+    field :created_by, Ecto.UUID
+    field :updated_by, Ecto.UUID
+    field :is_active, :boolean, default: false
+    field :scope, :string
+    field :division_id, Ecto.UUID
+    field :legal_entity_id, :string
 
     timestamps(type: :utc_datetime)
-  end
-
-  @fields ~W(
-    patient_id
-    start_date
-    end_date
-    signature
-    certificate
-    status
-    signed_at
-    created_by
-    updated_by
-    confident_person_id
-    active
-    doctor_id
-    msp_id
-  )
-
-  def insert(params) do
-    %__MODULE__{}
-    |> changeset(params)
-    |> Repo.insert
-  end
-
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, @fields)
   end
 end

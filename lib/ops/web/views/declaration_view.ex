@@ -6,28 +6,29 @@ defmodule OPS.Web.DeclarationView do
   alias OPS.Web.DeclarationView
 
   def render("index.json", %{declarations: declarations}) do
-    render_many(declarations, DeclarationView, "declaration.json")
+    render_many(declarations, DeclarationView, "declaration_in_list.json")
   end
 
   def render("show.json", %{declaration: declaration}) do
-    render_one(declaration, DeclarationView, "declaration.json")
+    render_one(declaration, DeclarationView, "declaration_in_list.json")
   end
 
-  def render("declaration.json", %{declaration: declaration}) do
+  def render("declaration_in_list.json", %{declaration: declaration}) do
     %{
-       id:                  declaration.id,
-       patient_id:          declaration.patient_id,
-       start_date:          declaration.start_date,
-       end_date:            declaration.end_date,
-       signature:           declaration.signature,
-       certificate:         declaration.certificate,
-       status:              declaration.status,
-       signed_at:           declaration.signed_at,
-       created_by:          declaration.created_by,
-       updated_by:          declaration.updated_by,
-       confident_person_id: declaration.confident_person_id,
-       doctor_id:           declaration.doctor_id,
-       msp_id:              declaration.msp_id
+       id: declaration.id,
+       person_id: declaration.person_id,
+       employee_id: declaration.employee_id,
+       division_id: declaration.division_id,
+       legal_entity_id: declaration.legal_entity_id,
+       scope: declaration.scope,
+       start_date: declaration.start_date,
+       end_date: declaration.end_date,
+       signed_at: declaration.signed_at,
+       status: declaration.status,
+       inserted_at: declaration.inserted_at,
+       created_by: declaration.created_by,
+       updated_at: declaration.updated_at,
+       updated_by: declaration.updated_by,
     }
   end
 end
