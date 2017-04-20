@@ -1,1 +1,15 @@
-../../../deps/change_logger/priv/repo/migrations/20170419082821_create_log_changes_table.exs
+defmodule ChangeLogger.Repo.Migrations.CreateLogChangesTable do
+  use Ecto.Migration
+
+  def change do
+    create table(:log_changes, primary_key: false) do
+      add :id, :uuid, primary_key: true
+      add :user_id, :string, null: false
+      add :resource, :string, null: false
+      add :resource_id, :string, null: false
+      add :what_changed, :map, null: false
+
+      timestamps([type: :utc_datetime, updated_at: false])
+    end
+  end
+end
