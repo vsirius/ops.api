@@ -62,6 +62,7 @@ defmodule OPS.Mixfile do
      {:multiverse, "~> 0.4.3"},
      {:eview, "~> 0.10.1"},
      {:phoenix_ecto, "~> 3.2"},
+     {:change_logger, ">= 0.0.0", git: "https://github.com/Nebo15/change_logger"},
      {:benchfella, ">= 0.3.4", only: [:dev, :test]},
      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},

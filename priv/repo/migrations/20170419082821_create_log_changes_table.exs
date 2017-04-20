@@ -1,0 +1,1 @@
+../../../deps/change_logger/priv/repo/migrations/20170419082821_create_log_changes_table.exs

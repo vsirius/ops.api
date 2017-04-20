@@ -20,14 +20,5 @@ defmodule PRM.Repo.Migrations.CreatePrm.Declaration do
 
       timestamps([type: :utc_datetime])
     end
-
-    create table(:declaration_log_changes, primary_key: false) do
-      add :id, :uuid, primary_key: true
-      add :user_id, :string, null: false
-      add :resource, :string, null: false
-      add :what_changed, :map, null: false
-
-      timestamps([type: :utc_datetime, updated_at: false])
-    end
   end
 end
