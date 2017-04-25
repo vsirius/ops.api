@@ -32,19 +32,15 @@ defmodule OPS.DeclarationAPI do
   def get_declaration!(id), do: Repo.get!(Declaration, id)
 
   def create_declaration(attrs \\ %{}) do
-    changeset = declaration_changeset(%Declaration{}, attrs)
-
-    changeset
-    |> Repo.insert()
-    |> ChangeLogger.save_changes(changeset, "declaration", Map.get(attrs, :created_by))
+    %Declaration{}
+    |> declaration_changeset(attrs)
+    |> ChangeLogger.insert("declaration", Map.get(attrs, :created_by))
   end
 
   def update_declaration(%Declaration{} = declaration, attrs) do
-    changeset = declaration_changeset(declaration, attrs)
-
-    changeset
-    |> Repo.update()
-    |> ChangeLogger.save_changes(changeset, "declaration", Map.get(attrs, :updated_by))
+    declaration
+    |> declaration_changeset(attrs)
+    |> ChangeLogger.update("declaration", Map.get(attrs, :updated_by))
   end
 
   def delete_declaration(%Declaration{} = declaration) do
