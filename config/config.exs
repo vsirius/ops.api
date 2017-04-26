@@ -26,8 +26,6 @@ use Mix.Config
 config :ops,
   ecto_repos: [OPS.Repo]
 
-config :change_logger, repo: OPS.Repo
-
 # Configure your database
 config :ops, OPS.Repo,
   adapter: Ecto.Adapters.Postgres,
