@@ -25,10 +25,8 @@ defmodule OPS.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [extra_applications: [:logger, :confex, :runtime_tools, :logger_json, :poison,
-                          :ecto, :postgrex, :cowboy,
-                          :httpoison, :phoenix,
-                          :multiverse, :eview,
-                          :phoenix_ecto],
+                          :ecto, :postgrex, :cowboy, :httpoison, :phoenix,
+                          :multiverse, :eview, :phoenix_ecto, :ecto_trail],
      mod: {OPS, []}]
   end
 
@@ -62,6 +60,7 @@ defmodule OPS.Mixfile do
      {:multiverse, "~> 0.4.3"},
      {:eview, "~> 0.10.1"},
      {:phoenix_ecto, "~> 3.2"},
+     {:ecto_trail, ">= 0.0.0"},
      {:benchfella, ">= 0.3.4", only: [:dev, :test]},
      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},

@@ -31,16 +31,17 @@ defmodule OPS.DeclarationAPI do
 
   def get_declaration!(id), do: Repo.get!(Declaration, id)
 
+  # TODO: Make more clearly getting created_by and updated_by parameters
   def create_declaration(attrs \\ %{}) do
     %Declaration{}
     |> declaration_changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert_and_log(Map.get(attrs, "created_by", Map.get(attrs, :created_by)))
   end
 
   def update_declaration(%Declaration{} = declaration, attrs) do
     declaration
     |> declaration_changeset(attrs)
-    |> Repo.update()
+    |> Repo.update_and_log(Map.get(attrs, "updated_by", Map.get(attrs, :updated_by)))
   end
 
   def delete_declaration(%Declaration{} = declaration) do
