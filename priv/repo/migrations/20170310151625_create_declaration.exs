@@ -1,4 +1,4 @@
-defmodule PRM.Repo.Migrations.CreatePrm.Declaration do
+defmodule OPS.Repo.Migrations.CreatePrm.Declaration do
   use Ecto.Migration
 
   def change do
