@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Nebo15/ops.api.svg?branch=master)](https://travis-ci.org/Nebo15/ops.api) [![Coverage Status](https://coveralls.io/repos/github/Nebo15/ops.api/badge.svg?branch=master)](https://coveralls.io/github/Nebo15/ops.api?branch=master)
 
-Operation database which stores Declarations.
+Operation database which stores Declarations for Ukrainian Health Services government institution.
 
 ## Specification
 
