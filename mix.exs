@@ -24,9 +24,7 @@ defmodule OPS.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :confex, :runtime_tools, :logger_json, :poison,
-                          :ecto, :postgrex, :cowboy, :httpoison, :phoenix,
-                          :multiverse, :eview, :phoenix_ecto, :ecto_trail],
+    [extra_applications: [:logger, :runtime_tools],
      mod: {OPS, []}]
   end
 

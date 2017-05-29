@@ -1,47 +1,28 @@
-# OPS
+# OPS API
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.org/Nebo15/ops.api.svg?branch=master)](https://travis-ci.org/Nebo15/ops.api) [![Coverage Status](https://coveralls.io/repos/github/Nebo15/ops.api/badge.svg?branch=master)](https://coveralls.io/github/Nebo15/ops.api?branch=master)
+
+Operation database which stores Declarations.
+
+## Specification
+
+- [API docs](http://docs.ehealthapi1.apiary.io/#reference/internal.-ops-db)
+- [Entity-relation diagram](https://edenlab.atlassian.net/wiki/display/EH/PRM)
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+You can use official Docker container to deploy this service, it can be found on [nebo15/ops](https://hub.docker.com/r/nebo15/ops/) Docker Hub.
 
-  1. Add `ops` to your list of dependencies in `mix.exs`:
+### Dependencies
 
-    ```elixir
-    def deps do
-      [{:ops, "~> 0.1.0"}]
-    end
-    ```
+- PostgreSQL 9.6 is used as storage back-end.
+- Elixir 1.4
+- Erlang/OTP 19.2
 
-  2. Ensure `ops` is started before your application:
+## Configuration
 
-    ```elixir
-    def application do
-      [applications: [:ops]]
-    end
-    ```
+See [ENVIRONMENT.md](docs/ENVIRONMENT.md).
 
-If [published on HexDocs](https://hex.pm/docs/tasks#hex_docs), the docs can
-be found at [https://hexdocs.pm/ops](https://hexdocs.pm/ops)
+## License
 
-
-# Phoenix App
-
-To start your Phoenix app:
-
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phoenix.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+See [LICENSE.md](LICENSE.md).
