@@ -44,4 +44,12 @@ defmodule OPS.Web.DeclarationController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def create_with_termination_logic(conn, declaration_params) do
+    case DeclarationAPI.create_declaration_with_termination_logic(declaration_params) do
+      {:ok, %{new_declaration: declaration}} ->
+        render(conn, "show.json", declaration: declaration)
+      {:error, _transaction_step, changeset, _} -> {:error, changeset}
+    end
+  end
 end

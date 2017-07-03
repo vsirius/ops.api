@@ -4,6 +4,7 @@ defmodule OPS.DeclarationAPI do
   """
 
   import Ecto.{Query, Changeset}, warn: false
+  alias Ecto.Multi
   alias OPS.Repo
 
   alias OPS.Declaration
@@ -89,7 +90,7 @@ defmodule OPS.DeclarationAPI do
     |> cast(attrs, fields)
     |> validate_required(required_fields)
     |> validate_inclusion(:scope, ["family_doctor"])
-    |> validate_inclusion(:status, ["active", "closed"])
+    |> validate_inclusion(:status, ["active", "closed", "terminated"])
   end
 
   defp declaration_search_changeset(%Declaration{} = declaration, attrs) do
@@ -118,5 +119,21 @@ defmodule OPS.DeclarationAPI do
       {:ok, ""} -> false
       {:ok, _} -> true
     end
+  end
+
+  def create_declaration_with_termination_logic(declaration_params) do
+    # TODO: Red Lists
+
+    person_id = Map.get(declaration_params, "person_id", Map.get(declaration_params, :person_id))
+
+    changeset = declaration_search_changeset(%Declaration{}, %{"person_id" => person_id, "status" => "active"})
+
+    query = from d in Declaration,
+      where: ^Map.to_list(changeset.changes)
+
+    Multi.new()
+    |> Multi.update_all(:previous_declarations, query, set: [status: "terminated", is_active: false])
+    |> Multi.insert(:new_declaration, declaration_changeset(%Declaration{}, declaration_params))
+    |> Repo.transaction()
   end
 end

@@ -87,6 +87,35 @@ defmodule OPS.DeclarationAPITest do
     assert {:error, %Ecto.Changeset{}} = DeclarationAPI.create_declaration(@invalid_attrs)
   end
 
+  describe "create_declaration_with_termination_logic/1" do
+    test "with valid data creates declaration and terminates other person declarations" do
+      %{id: id1} = fixture(:declaration)
+      %{id: id2} = fixture(:declaration, Map.put(@create_attrs, :person_id, "another_person_id"))
+      {:ok, %{new_declaration: %{id: id}}} = DeclarationAPI.create_declaration_with_termination_logic(@create_attrs)
+
+      %{id: ^id} = DeclarationAPI.get_declaration!(id)
+
+      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id1)
+      assert "terminated" == status
+      refute is_active
+
+      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id2)
+      assert "active" == status
+      assert is_active
+    end
+
+    test "with invalid data doesn't terminate other declarations and returns error changeset" do
+      %{id: id} = fixture(:declaration)
+      invalid_attrs = Map.put(@invalid_attrs, :person_id, "person_id")
+      assert {:error, _transaction_step, %Ecto.Changeset{}, _}
+        = DeclarationAPI.create_declaration_with_termination_logic(invalid_attrs)
+
+      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id)
+      assert "active" == status
+      assert is_active
+    end
+  end
+
   test "update_declaration/2 with valid data updates the declaration" do
     declaration = fixture(:declaration)
     assert {:ok, declaration} = DeclarationAPI.update_declaration(declaration, @update_attrs)

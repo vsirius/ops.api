@@ -26,5 +26,6 @@ defmodule OPS.Web.Router do
 
     resources "/declarations", DeclarationController
     get "/reports/declarations", DeclarationReportController, :declarations
+    post "/declarations/create_with_termination_logic", DeclarationController, :create_with_termination_logic
   end
 end

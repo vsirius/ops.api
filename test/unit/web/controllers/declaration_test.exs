@@ -40,9 +40,9 @@ defmodule OPS.Web.DeclarationControllerTest do
      division_id: "invalid"
    }
 
-  def fixture(:declaration) do
+  def fixture(:declaration, attrs \\ @create_attrs) do
     create_attrs =
-      @create_attrs
+      attrs
       |> Map.put(:employee_id, Ecto.UUID.generate())
       |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
@@ -103,6 +103,39 @@ defmodule OPS.Web.DeclarationControllerTest do
   test "does not create declaration and renders errors when data is invalid", %{conn: conn} do
     conn = post conn, declaration_path(conn, :create), declaration: @invalid_attrs
     assert json_response(conn, 422)["errors"] != %{}
+  end
+
+  test "creates declaration and terminates other person declarations when data is valid", %{conn: conn} do
+    %{id: id1} = fixture(:declaration)
+    %{id: id2} = fixture(:declaration, Map.put(@create_attrs, :person_id, "another_person_id"))
+    conn = post conn, declaration_path(conn, :create_with_termination_logic), @create_attrs
+    resp = json_response(conn, 200)
+    assert Map.has_key?(resp, "data")
+    assert Map.has_key?(resp["data"], "id")
+    id = resp["data"]["id"]
+    assert id
+
+    %{id: ^id} = DeclarationAPI.get_declaration!(id)
+
+    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id1)
+    assert "terminated" == status
+    refute is_active
+
+    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id2)
+    assert "active" == status
+    assert is_active
+  end
+
+  test "doesn't terminate other declarations and renders errors when data is invalid", %{conn: conn} do
+    %{id: id} = fixture(:declaration)
+    invalid_attrs = Map.put(@invalid_attrs, :person_id, "person_id")
+    conn = post conn, declaration_path(conn, :create_with_termination_logic), invalid_attrs
+    resp = json_response(conn, 422)
+    assert Map.has_key?(resp, "error")
+
+    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id)
+    assert "active" == status
+    assert is_active
   end
 
   test "updates chosen declaration and renders declaration when data is valid", %{conn: conn} do
