@@ -5,11 +5,10 @@ defmodule OPS.Web.DeclarationControllerTest do
   alias OPS.Declaration
 
   @create_attrs %{
-    declaration_signed_id: Ecto.UUID.generate(),
     employee_id: "employee_id",
     person_id: "person_id",
-    start_date: "2016-10-10",
-    end_date: "2016-12-07",
+    start_date: "2016-10-10 00:00:00.000000",
+    end_date: "2016-12-07 00:00:00.000000",
     status: "active",
     signed_at: "2016-10-09 23:50:07.000000",
     created_by: Ecto.UUID.generate(),
@@ -21,11 +20,10 @@ defmodule OPS.Web.DeclarationControllerTest do
   }
 
   @update_attrs %{
-    declaration_signed_id: Ecto.UUID.generate(),
     employee_id: "updated_employee_id",
     person_id: "updated_person_id",
-    start_date: "2016-10-11",
-    end_date: "2016-12-08",
+    start_date: "2016-10-11 00:00:00.000000",
+    end_date: "2016-12-08 00:00:00.000000",
     status: "closed",
     signed_at: "2016-10-10 23:50:07.000000",
     created_by: Ecto.UUID.generate(),
@@ -87,8 +85,8 @@ defmodule OPS.Web.DeclarationControllerTest do
       "division_id" => @create_attrs.division_id,
       "legal_entity_id" => "legal_entity_id",
       "scope" => "family_doctor",
-      "start_date" => "2016-10-10",
-      "end_date" => "2016-12-07",
+      "start_date" => "2016-10-10T00:00:00.000000Z",
+      "end_date" => "2016-12-07T00:00:00.000000Z",
       "signed_at" => "2016-10-09T23:50:07.000000Z",
       "status" => "active",
       "inserted_at" => inserted_at,
@@ -151,8 +149,8 @@ defmodule OPS.Web.DeclarationControllerTest do
       "division_id" => @update_attrs.division_id,
       "legal_entity_id" => "updated_legal_entity_id",
       "scope" => "family_doctor",
-      "start_date" => "2016-10-11",
-      "end_date" => "2016-12-08",
+      "start_date" => "2016-10-11T00:00:00.000000Z",
+      "end_date" => "2016-12-08T00:00:00.000000Z",
       "signed_at" => "2016-10-10T23:50:07.000000Z",
       "status" => "closed",
       "inserted_at" => inserted_at,

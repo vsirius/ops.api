@@ -4,11 +4,10 @@ defmodule OPS.Declaration.ReportTest do
   alias OPS.DeclarationAPI
 
   @create_attrs %{
-    declaration_signed_id: Ecto.UUID.generate(),
     employee_id: "employee_id",
     person_id: "person_id",
-    start_date: "2016-10-10",
-    end_date: "2016-12-07",
+    start_date: "2016-10-10 00:00:00.000000",
+    end_date: "2016-12-07 00:00:00.000000",
     status: "active",
     signed_at: "2016-10-09 23:50:07.000000",
     created_by: Ecto.UUID.generate(),
@@ -32,8 +31,8 @@ defmodule OPS.Declaration.ReportTest do
   test "report" do
     declaration = fixture(:declaration)
     params = %{
-      "start_date" => "2016-12-09",
-      "end_date" => "2017-12-09",
+      "start_date" => "2016-12-09 00:00:00.000000",
+      "end_date" => "2017-12-09 00:00:00.000000",
       "employee_id" => declaration.employee_id,
       "legal_entity_id" => declaration.legal_entity_id
     }

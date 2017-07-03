@@ -6,11 +6,10 @@ defmodule OPS.Declaration do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "declarations" do
-    field :declaration_signed_id, Ecto.UUID
     field :employee_id, :string
     field :person_id, :string
-    field :start_date, :date
-    field :end_date, :date
+    field :start_date, :utc_datetime
+    field :end_date, :utc_datetime
     field :status, :string
     field :signed_at, :utc_datetime
     field :created_by, Ecto.UUID

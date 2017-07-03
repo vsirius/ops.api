@@ -55,7 +55,6 @@ defmodule OPS.DeclarationAPI do
 
   defp declaration_changeset(%Declaration{} = declaration, attrs) do
     fields = ~W(
-      declaration_signed_id
       employee_id
       person_id
       start_date
@@ -71,7 +70,6 @@ defmodule OPS.DeclarationAPI do
     )
 
     required_fields = [
-      :declaration_signed_id,
       :employee_id,
       :person_id,
       :start_date,
