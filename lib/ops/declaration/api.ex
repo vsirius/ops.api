@@ -127,7 +127,7 @@ defmodule OPS.DeclarationAPI do
       where: ^Map.to_list(changeset.changes)
 
     Multi.new()
-    |> Multi.update_all(:previous_declarations, query, set: [status: "terminated", is_active: false])
+    |> Multi.update_all(:previous_declarations, query, set: [status: "terminated"])
     |> Multi.insert(:new_declaration, declaration_changeset(%Declaration{}, declaration_params))
     |> Repo.transaction()
   end

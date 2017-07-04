@@ -115,13 +115,11 @@ defmodule OPS.Web.DeclarationControllerTest do
 
     %{id: ^id} = DeclarationAPI.get_declaration!(id)
 
-    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id1)
+    %{status: status} = DeclarationAPI.get_declaration!(id1)
     assert "terminated" == status
-    refute is_active
 
-    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id2)
+    %{status: status} = DeclarationAPI.get_declaration!(id2)
     assert "active" == status
-    assert is_active
   end
 
   test "doesn't terminate other declarations and renders errors when data is invalid", %{conn: conn} do
@@ -131,9 +129,8 @@ defmodule OPS.Web.DeclarationControllerTest do
     resp = json_response(conn, 422)
     assert Map.has_key?(resp, "error")
 
-    %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id)
+    %{status: status} = DeclarationAPI.get_declaration!(id)
     assert "active" == status
-    assert is_active
   end
 
   test "updates chosen declaration and renders declaration when data is valid", %{conn: conn} do

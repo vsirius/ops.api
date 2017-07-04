@@ -93,13 +93,11 @@ defmodule OPS.DeclarationAPITest do
 
       %{id: ^id} = DeclarationAPI.get_declaration!(id)
 
-      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id1)
+      %{status: status} = DeclarationAPI.get_declaration!(id1)
       assert "terminated" == status
-      refute is_active
 
-      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id2)
+      %{status: status} = DeclarationAPI.get_declaration!(id2)
       assert "active" == status
-      assert is_active
     end
 
     test "with invalid data doesn't terminate other declarations and returns error changeset" do
@@ -108,9 +106,8 @@ defmodule OPS.DeclarationAPITest do
       assert {:error, _transaction_step, %Ecto.Changeset{}, _}
         = DeclarationAPI.create_declaration_with_termination_logic(invalid_attrs)
 
-      %{status: status, is_active: is_active} = DeclarationAPI.get_declaration!(id)
+      %{status: status} = DeclarationAPI.get_declaration!(id)
       assert "active" == status
-      assert is_active
     end
   end
 
