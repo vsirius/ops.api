@@ -119,11 +119,8 @@ defmodule OPS.DeclarationAPI do
     end
   end
 
-  def create_declaration_with_termination_logic(declaration_params) do
+  def create_declaration_with_termination_logic(%{"person_id" => person_id} = declaration_params) do
     # TODO: Red Lists
-
-    person_id = Map.get(declaration_params, "person_id", Map.get(declaration_params, :person_id))
-
     changeset = declaration_search_changeset(%Declaration{}, %{"person_id" => person_id, "status" => "active"})
 
     query = from d in Declaration,
