@@ -6,8 +6,8 @@ defmodule OPS.Declaration do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "declarations" do
-    field :employee_id, :string
-    field :person_id, :string
+    field :employee_id, Ecto.UUID
+    field :person_id, Ecto.UUID
     field :start_date, :utc_datetime
     field :end_date, :utc_datetime
     field :status, :string
@@ -17,7 +17,7 @@ defmodule OPS.Declaration do
     field :is_active, :boolean, default: false
     field :scope, :string
     field :division_id, Ecto.UUID
-    field :legal_entity_id, :string
+    field :legal_entity_id, Ecto.UUID
 
     timestamps(type: :utc_datetime)
   end

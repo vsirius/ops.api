@@ -51,11 +51,13 @@ defmodule OPS.Declaration.Report do
       start_date: :utc_datetime,
       end_date: :utc_datetime,
       employee_id: Ecto.UUID,
+      legal_entity_id: Ecto.UUID
     }
     required_fields = [
       :start_date,
       :end_date,
       :employee_id,
+      :legal_entity_id
     ]
 
     {data, types}

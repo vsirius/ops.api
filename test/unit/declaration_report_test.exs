@@ -4,8 +4,8 @@ defmodule OPS.Declaration.ReportTest do
   alias OPS.DeclarationAPI
 
   @create_attrs %{
-    employee_id: "employee_id",
-    person_id: "person_id",
+    employee_id: Ecto.UUID.generate(),
+    person_id: Ecto.UUID.generate(),
     start_date: "2016-10-10 00:00:00.000000",
     end_date: "2016-12-07 00:00:00.000000",
     status: "active",
@@ -15,7 +15,7 @@ defmodule OPS.Declaration.ReportTest do
     is_active: true,
     scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
-    legal_entity_id: "legal_entity_id",
+    legal_entity_id: Ecto.UUID.generate(),
   }
 
   def fixture(:declaration, attrs \\ @create_attrs) do

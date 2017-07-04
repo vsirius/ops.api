@@ -5,8 +5,8 @@ defmodule OPS.Web.DeclarationControllerTest do
   alias OPS.Declaration
 
   @create_attrs %{
-    employee_id: "employee_id",
-    person_id: "person_id",
+    employee_id: Ecto.UUID.generate(),
+    person_id: Ecto.UUID.generate(),
     start_date: "2016-10-10 00:00:00.000000",
     end_date: "2016-12-07 00:00:00.000000",
     status: "active",
@@ -16,12 +16,12 @@ defmodule OPS.Web.DeclarationControllerTest do
     is_active: true,
     scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
-    legal_entity_id: "legal_entity_id",
+    legal_entity_id: Ecto.UUID.generate(),
   }
 
   @update_attrs %{
-    employee_id: "updated_employee_id",
-    person_id: "updated_person_id",
+    employee_id: Ecto.UUID.generate(),
+    person_id: Ecto.UUID.generate(),
     start_date: "2016-10-11 00:00:00.000000",
     end_date: "2016-12-08 00:00:00.000000",
     status: "closed",
@@ -31,7 +31,7 @@ defmodule OPS.Web.DeclarationControllerTest do
     is_active: false,
     scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
-    legal_entity_id: "updated_legal_entity_id",
+    legal_entity_id: Ecto.UUID.generate(),
   }
 
    @invalid_attrs %{
@@ -80,10 +80,10 @@ defmodule OPS.Web.DeclarationControllerTest do
     conn = get conn, declaration_path(conn, :show, id)
     assert json_response(conn, 200)["data"] == %{
       "id" => id,
-      "person_id" => "person_id",
-      "employee_id" => "employee_id",
+      "person_id" => @create_attrs.person_id,
+      "employee_id" => @create_attrs.employee_id,
       "division_id" => @create_attrs.division_id,
-      "legal_entity_id" => "legal_entity_id",
+      "legal_entity_id" => @create_attrs.legal_entity_id,
       "scope" => "family_doctor",
       "start_date" => "2016-10-10T00:00:00.000000Z",
       "end_date" => "2016-12-07T00:00:00.000000Z",
@@ -105,7 +105,7 @@ defmodule OPS.Web.DeclarationControllerTest do
 
   test "creates declaration and terminates other person declarations when data is valid", %{conn: conn} do
     %{id: id1} = fixture(:declaration)
-    %{id: id2} = fixture(:declaration, Map.put(@create_attrs, :person_id, "another_person_id"))
+    %{id: id2} = fixture(:declaration, Map.put(@create_attrs, :person_id, Ecto.UUID.generate()))
     conn = post conn, declaration_path(conn, :create_with_termination_logic), @create_attrs
     resp = json_response(conn, 200)
     assert Map.has_key?(resp, "data")
@@ -141,10 +141,10 @@ defmodule OPS.Web.DeclarationControllerTest do
     conn = get conn, declaration_path(conn, :show, id)
     assert json_response(conn, 200)["data"] == %{
       "id" => id,
-      "person_id" => "updated_person_id",
-      "employee_id" => "updated_employee_id",
+      "person_id" => @update_attrs.person_id,
+      "employee_id" => @update_attrs.employee_id,
       "division_id" => @update_attrs.division_id,
-      "legal_entity_id" => "updated_legal_entity_id",
+      "legal_entity_id" => @update_attrs.legal_entity_id,
       "scope" => "family_doctor",
       "start_date" => "2016-10-11T00:00:00.000000Z",
       "end_date" => "2016-12-08T00:00:00.000000Z",

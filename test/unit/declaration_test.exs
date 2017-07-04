@@ -5,8 +5,8 @@ defmodule OPS.DeclarationAPITest do
   alias OPS.Declaration
 
   @create_attrs %{
-    "employee_id" => "employee_id",
-    "person_id" => "person_id",
+    "employee_id" => Ecto.UUID.generate(),
+    "person_id" => Ecto.UUID.generate(),
     "start_date" => "2016-10-10 00:00:00.000000",
     "end_date" => "2016-12-07 00:00:00.000000",
     "status" => "active",
@@ -16,12 +16,12 @@ defmodule OPS.DeclarationAPITest do
     "is_active" => true,
     "scope" => "family_doctor",
     "division_id" => Ecto.UUID.generate(),
-    "legal_entity_id" => "legal_entity_id",
+    "legal_entity_id" => Ecto.UUID.generate(),
   }
 
   @update_attrs %{
-    "employee_id" => "updated_employee_id",
-    "person_id" => "updated_person_id",
+    "employee_id" => Ecto.UUID.generate(),
+    "person_id" => Ecto.UUID.generate(),
     "start_date" => "2016-10-11 00:00:00.000000",
     "end_date" => "2016-12-08 00:00:00.000000",
     "status" => "closed",
@@ -31,7 +31,7 @@ defmodule OPS.DeclarationAPITest do
     "is_active" => false,
     "scope" => "family_doctor",
     "division_id" => Ecto.UUID.generate(),
-    "legal_entity_id" => "updated_legal_entity_id",
+    "legal_entity_id" => Ecto.UUID.generate(),
   }
 
    @invalid_attrs %{
@@ -67,7 +67,7 @@ defmodule OPS.DeclarationAPITest do
 
     assert {:ok, %Declaration{} = declaration} = DeclarationAPI.create_declaration(create_attrs)
 
-    assert declaration.person_id == "person_id"
+    assert declaration.person_id == create_attrs["person_id"]
     assert declaration.start_date
     assert declaration.end_date
     assert declaration.status == "active"
@@ -88,7 +88,7 @@ defmodule OPS.DeclarationAPITest do
   describe "create_declaration_with_termination_logic/1" do
     test "with valid data creates declaration and terminates other person declarations" do
       %{id: id1} = fixture(:declaration)
-      %{id: id2} = fixture(:declaration, Map.put(@create_attrs, "person_id", "another_person_id"))
+      %{id: id2} = fixture(:declaration, Map.put(@create_attrs, "person_id", Ecto.UUID.generate()))
       {:ok, %{new_declaration: %{id: id}}} = DeclarationAPI.create_declaration_with_termination_logic(@create_attrs)
 
       %{id: ^id} = DeclarationAPI.get_declaration!(id)
@@ -116,7 +116,7 @@ defmodule OPS.DeclarationAPITest do
     assert {:ok, declaration} = DeclarationAPI.update_declaration(declaration, @update_attrs)
     assert %Declaration{} = declaration
 
-    assert declaration.person_id == "updated_person_id"
+    assert declaration.person_id == @update_attrs["person_id"]
     assert declaration.start_date
     assert declaration.end_date
     assert declaration.status == "closed"
@@ -125,7 +125,7 @@ defmodule OPS.DeclarationAPITest do
     assert declaration.created_by == @update_attrs["created_by"]
     assert declaration.updated_by == @update_attrs["updated_by"]
     refute declaration.is_active
-    assert declaration.employee_id == "updated_employee_id"
+    assert declaration.employee_id == @update_attrs["employee_id"]
     assert declaration.legal_entity_id == @update_attrs["legal_entity_id"]
   end
 
