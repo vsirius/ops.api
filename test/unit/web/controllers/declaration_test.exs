@@ -1,8 +1,8 @@
 defmodule OPS.Web.DeclarationControllerTest do
   use OPS.Web.ConnCase
 
-  alias OPS.DeclarationAPI
-  alias OPS.Declaration
+  alias OPS.Declarations
+  alias OPS.Declarations.Declaration
 
   @create_attrs %{
     employee_id: Ecto.UUID.generate(),
@@ -44,7 +44,7 @@ defmodule OPS.Web.DeclarationControllerTest do
       |> Map.put(:employee_id, Ecto.UUID.generate())
       |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
-    {:ok, declaration} = DeclarationAPI.create_declaration(create_attrs)
+    {:ok, declaration} = Declarations.create_declaration(create_attrs)
     declaration
   end
 
@@ -113,12 +113,12 @@ defmodule OPS.Web.DeclarationControllerTest do
     id = resp["data"]["id"]
     assert id
 
-    %{id: ^id} = DeclarationAPI.get_declaration!(id)
+    %{id: ^id} = Declarations.get_declaration!(id)
 
-    %{status: status} = DeclarationAPI.get_declaration!(id1)
+    %{status: status} = Declarations.get_declaration!(id1)
     assert "terminated" == status
 
-    %{status: status} = DeclarationAPI.get_declaration!(id2)
+    %{status: status} = Declarations.get_declaration!(id2)
     assert "active" == status
   end
 
@@ -129,7 +129,7 @@ defmodule OPS.Web.DeclarationControllerTest do
     resp = json_response(conn, 422)
     assert Map.has_key?(resp, "error")
 
-    %{status: status} = DeclarationAPI.get_declaration!(id)
+    %{status: status} = Declarations.get_declaration!(id)
     assert "active" == status
   end
 

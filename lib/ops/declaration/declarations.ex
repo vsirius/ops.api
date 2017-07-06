@@ -1,13 +1,13 @@
-defmodule OPS.DeclarationAPI do
+defmodule OPS.Declarations do
   @moduledoc """
-  The boundary for the DeclarationAPI system
+  The boundary for the Declarations system
   """
 
   import Ecto.{Query, Changeset}, warn: false
   alias Ecto.Multi
   alias OPS.Repo
 
-  alias OPS.Declaration
+  alias OPS.Declarations.Declaration
 
   def list_declarations(params) when map_size(params) == 0 do
     query = from d in Declaration,

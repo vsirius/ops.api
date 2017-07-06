@@ -1,8 +1,8 @@
-defmodule OPS.DeclarationAPITest do
+defmodule OPS.DeclarationTest do
   use OPS.DataCase
 
-  alias OPS.DeclarationAPI
-  alias OPS.Declaration
+  alias OPS.Declarations
+  alias OPS.Declarations.Declaration
 
   @create_attrs %{
     "employee_id" => Ecto.UUID.generate(),
@@ -45,18 +45,18 @@ defmodule OPS.DeclarationAPITest do
       |> Map.put("legal_entity_id", Ecto.UUID.generate())
 
 
-    {:ok, declaration} = DeclarationAPI.create_declaration(create_attrs)
+    {:ok, declaration} = Declarations.create_declaration(create_attrs)
     declaration
   end
 
   test "list_declarations/1 returns all declarations" do
     declaration = fixture(:declaration)
-    assert DeclarationAPI.list_declarations(%{}) == {:ok, [declaration]}
+    assert Declarations.list_declarations(%{}) == {:ok, [declaration]}
   end
 
   test "get_declaration! returns the declaration with given id" do
     declaration = fixture(:declaration)
-    assert DeclarationAPI.get_declaration!(declaration.id) == declaration
+    assert Declarations.get_declaration!(declaration.id) == declaration
   end
 
   test "create_declaration/1 with valid data creates a declaration" do
@@ -65,7 +65,7 @@ defmodule OPS.DeclarationAPITest do
       |> Map.put("employee_id", Ecto.UUID.generate())
       |> Map.put("legal_entity_id", Ecto.UUID.generate())
 
-    assert {:ok, %Declaration{} = declaration} = DeclarationAPI.create_declaration(create_attrs)
+    assert {:ok, %Declaration{} = declaration} = Declarations.create_declaration(create_attrs)
 
     assert declaration.person_id == create_attrs["person_id"]
     assert declaration.start_date
@@ -82,21 +82,21 @@ defmodule OPS.DeclarationAPITest do
 
   @tag pending: true
   test "create_declaration/1 with invalid data returns error changeset" do
-    assert {:error, %Ecto.Changeset{}} = DeclarationAPI.create_declaration(@invalid_attrs)
+    assert {:error, %Ecto.Changeset{}} = Declarations.create_declaration(@invalid_attrs)
   end
 
   describe "create_declaration_with_termination_logic/1" do
     test "with valid data creates declaration and terminates other person declarations" do
       %{id: id1} = fixture(:declaration)
       %{id: id2} = fixture(:declaration, Map.put(@create_attrs, "person_id", Ecto.UUID.generate()))
-      {:ok, %{new_declaration: %{id: id}}} = DeclarationAPI.create_declaration_with_termination_logic(@create_attrs)
+      {:ok, %{new_declaration: %{id: id}}} = Declarations.create_declaration_with_termination_logic(@create_attrs)
 
-      %{id: ^id} = DeclarationAPI.get_declaration!(id)
+      %{id: ^id} = Declarations.get_declaration!(id)
 
-      %{status: status} = DeclarationAPI.get_declaration!(id1)
+      %{status: status} = Declarations.get_declaration!(id1)
       assert "terminated" == status
 
-      %{status: status} = DeclarationAPI.get_declaration!(id2)
+      %{status: status} = Declarations.get_declaration!(id2)
       assert "active" == status
     end
 
@@ -104,16 +104,16 @@ defmodule OPS.DeclarationAPITest do
       %{id: id} = fixture(:declaration)
       invalid_attrs = Map.put(@invalid_attrs, "person_id", "person_id")
       assert {:error, _transaction_step, %Ecto.Changeset{}, _}
-        = DeclarationAPI.create_declaration_with_termination_logic(invalid_attrs)
+        = Declarations.create_declaration_with_termination_logic(invalid_attrs)
 
-      %{status: status} = DeclarationAPI.get_declaration!(id)
+      %{status: status} = Declarations.get_declaration!(id)
       assert "active" == status
     end
   end
 
   test "update_declaration/2 with valid data updates the declaration" do
     declaration = fixture(:declaration)
-    assert {:ok, declaration} = DeclarationAPI.update_declaration(declaration, @update_attrs)
+    assert {:ok, declaration} = Declarations.update_declaration(declaration, @update_attrs)
     assert %Declaration{} = declaration
 
     assert declaration.person_id == @update_attrs["person_id"]
@@ -131,18 +131,18 @@ defmodule OPS.DeclarationAPITest do
 
   test "update_declaration/2 with invalid data returns error changeset" do
     declaration = fixture(:declaration)
-    assert {:error, %Ecto.Changeset{}} = DeclarationAPI.update_declaration(declaration, @invalid_attrs)
-    assert declaration == DeclarationAPI.get_declaration!(declaration.id)
+    assert {:error, %Ecto.Changeset{}} = Declarations.update_declaration(declaration, @invalid_attrs)
+    assert declaration == Declarations.get_declaration!(declaration.id)
   end
 
   test "delete_declaration/1 deletes the declaration" do
     declaration = fixture(:declaration)
-    assert {:ok, %Declaration{}} = DeclarationAPI.delete_declaration(declaration)
-    assert_raise Ecto.NoResultsError, fn -> DeclarationAPI.get_declaration!(declaration.id) end
+    assert {:ok, %Declaration{}} = Declarations.delete_declaration(declaration)
+    assert_raise Ecto.NoResultsError, fn -> Declarations.get_declaration!(declaration.id) end
   end
 
   test "change_declaration/1 returns a declaration changeset" do
     declaration = fixture(:declaration)
-    assert %Ecto.Changeset{} = DeclarationAPI.change_declaration(declaration)
+    assert %Ecto.Changeset{} = Declarations.change_declaration(declaration)
   end
 end

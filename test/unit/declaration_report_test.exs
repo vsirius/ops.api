@@ -1,7 +1,7 @@
 defmodule OPS.Declaration.ReportTest do
   use OPS.DataCase
 
-  alias OPS.DeclarationAPI
+  alias OPS.Declarations
 
   @create_attrs %{
     employee_id: Ecto.UUID.generate(),
@@ -24,7 +24,7 @@ defmodule OPS.Declaration.ReportTest do
       |> Map.put(:employee_id, Ecto.UUID.generate())
       |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
-    {:ok, declaration} = DeclarationAPI.create_declaration(create_attrs)
+    {:ok, declaration} = Declarations.create_declaration(create_attrs)
     declaration
   end
 
@@ -36,7 +36,7 @@ defmodule OPS.Declaration.ReportTest do
       "employee_id" => declaration.employee_id,
       "legal_entity_id" => declaration.legal_entity_id
     }
-    assert {:ok, list} = OPS.Declaration.Report.report(params)
+    assert {:ok, list} = OPS.Declarations.Report.report(params)
     assert is_list(list)
   end
 end

@@ -1,8 +1,6 @@
-defmodule OPS.Declaration do
+defmodule OPS.Declarations.Declaration do
   @moduledoc false
   use Ecto.Schema
-  import Ecto.Changeset
-  alias OPS.Repo
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "declarations" do

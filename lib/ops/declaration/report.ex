@@ -1,4 +1,4 @@
-defmodule OPS.Declaration.Report do
+defmodule OPS.Declarations.Report do
   @moduledoc false
 
   import Ecto.Changeset, warn: false
