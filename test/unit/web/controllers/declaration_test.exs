@@ -92,8 +92,7 @@ defmodule OPS.Web.DeclarationControllerTest do
       "inserted_at" => inserted_at,
       "created_by" => @create_attrs.created_by,
       "updated_at" => updated_at,
-      "updated_by" => @create_attrs.updated_by,
-      "type" => "declaration"
+      "updated_by" => @create_attrs.updated_by
     }
   end
 
@@ -153,8 +152,7 @@ defmodule OPS.Web.DeclarationControllerTest do
       "inserted_at" => inserted_at,
       "created_by" => @update_attrs.created_by,
       "updated_at" => updated_at,
-      "updated_by" => @update_attrs.updated_by,
-      "type" => "declaration"
+      "updated_by" => @update_attrs.updated_by
     }
   end
 
