@@ -48,8 +48,8 @@ defmodule OPS.Declaration.Report do
   def report_changeset(attrs) do
     data = %{}
     types = %{
-      start_date: :utc_datetime,
-      end_date: :utc_datetime,
+      start_date: :date,
+      end_date: :date,
       employee_id: Ecto.UUID,
       legal_entity_id: Ecto.UUID
     }
