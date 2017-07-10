@@ -8,6 +8,8 @@ ENV MIX_ENV=prod \
     APP_NAME=ops \
     APP_PORT=4000
 
+RUN apk add --update make
+
 WORKDIR ${HOME}
 
 # Install and compile project dependencies
@@ -39,6 +41,8 @@ RUN \
     chmod -R 777 $HOME && \
     chmod -R 777 /opt/$APP_NAME && \
     chmod -R 777 /var/log
+
+RUN apk del make
 
 # Change user to "default"
 USER default

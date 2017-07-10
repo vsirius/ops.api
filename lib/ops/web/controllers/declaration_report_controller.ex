@@ -1,7 +1,7 @@
 defmodule OPS.Web.DeclarationReportController do
   @moduledoc false
   use OPS.Web, :controller
-  alias OPS.Declaration.Report
+  alias OPS.Declarations.Report
 
   action_fallback OPS.Web.FallbackController
 

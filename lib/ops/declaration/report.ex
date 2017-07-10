@@ -1,4 +1,4 @@
-defmodule OPS.Declaration.Report do
+defmodule OPS.Declarations.Report do
   @moduledoc false
 
   import Ecto.Changeset, warn: false
@@ -51,11 +51,13 @@ defmodule OPS.Declaration.Report do
       start_date: :date,
       end_date: :date,
       employee_id: Ecto.UUID,
+      legal_entity_id: Ecto.UUID
     }
     required_fields = [
       :start_date,
       :end_date,
       :employee_id,
+      :legal_entity_id
     ]
 
     {data, types}
