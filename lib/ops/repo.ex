@@ -6,6 +6,7 @@ defmodule OPS.Repo do
   """
   use Ecto.Repo, otp_app: :ops
   use EctoTrail
+  use Ecto.Paging.Repo
 
   @doc """
   Dynamically loads the repository configuration from the environment variables.

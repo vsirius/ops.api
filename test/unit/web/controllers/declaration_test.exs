@@ -68,9 +68,21 @@ defmodule OPS.Web.DeclarationControllerTest do
     refute doctor_id_2 == resp_declaration["employee_id"]
   end
 
-  test "returns errors when searching entries", %{conn: conn} do
+  test "search declarations by legal_entity_id and", %{conn: conn} do
+    %{employee_id: employee_id, legal_entity_id: legal_entity_id, id: id} = fixture(:declaration)
+    fixture(:declaration)
+
+    conn = get conn, declaration_path(conn, :index), [legal_entity_id: legal_entity_id, employee_id: employee_id]
+
+    assert [resp_declaration] = json_response(conn, 200)["data"]
+    assert id == resp_declaration["id"]
+    assert employee_id == resp_declaration["employee_id"]
+    assert legal_entity_id == resp_declaration["legal_entity_id"]
+  end
+
+  test "ignore invalid search params", %{conn: conn} do
     conn = get conn, declaration_path(conn, :index) <> "?created_by=nil"
-    assert json_response(conn, 422)["error"]
+    assert [] == json_response(conn, 200)["data"]
   end
 
   test "creates declaration and renders declaration when data is valid", %{conn: conn} do

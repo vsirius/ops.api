@@ -51,7 +51,7 @@ defmodule OPS.DeclarationTest do
 
   test "list_declarations/1 returns all declarations" do
     declaration = fixture(:declaration)
-    assert Declarations.list_declarations(%{}) == {:ok, [declaration]}
+    assert {[^declaration], %Ecto.Paging{}} = Declarations.list_declarations(%{})
   end
 
   test "get_declaration! returns the declaration with given id" do

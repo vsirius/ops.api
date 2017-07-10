@@ -3,31 +3,18 @@ defmodule OPS.Declarations do
   The boundary for the Declarations system
   """
 
+  use OPS.Search
   import Ecto.{Query, Changeset}, warn: false
   alias Ecto.Multi
   alias OPS.Repo
 
   alias OPS.Declarations.Declaration
-
-  def list_declarations(params) when map_size(params) == 0 do
-    query = from d in Declaration,
-      order_by: [desc: :inserted_at]
-
-    {:ok, Repo.all(query)}
-  end
+  alias OPS.Declarations.DeclarationSearch
 
   def list_declarations(params) do
-    changeset = declaration_search_changeset(%Declaration{}, params)
-
-    if changeset.valid? do
-      query = from d in Declaration,
-        where: ^Map.to_list(changeset.changes),
-        order_by: [desc: :inserted_at]
-
-      {:ok, Repo.all(query)}
-    else
-      changeset
-    end
+    %DeclarationSearch{}
+    |> declaration_changeset(params)
+    |> search(params, Declaration, 50)
   end
 
   def get_declaration!(id), do: Repo.get!(Declaration, id)
@@ -67,61 +54,29 @@ defmodule OPS.Declarations do
       scope
       division_id
       legal_entity_id
-    )
-
-    required_fields = [
-      :employee_id,
-      :person_id,
-      :start_date,
-      :end_date,
-      :status,
-      :signed_at,
-      :created_by,
-      :updated_by,
-      :is_active,
-      :scope,
-      :division_id,
-      :legal_entity_id,
-    ]
+    )a
 
     declaration
     |> cast(attrs, fields)
-    |> validate_required(required_fields)
+    |> validate_required(fields)
     |> validate_inclusion(:scope, ["family_doctor"])
     |> validate_inclusion(:status, ["active", "closed", "terminated", "pending_verification"])
   end
 
-  defp declaration_search_changeset(%Declaration{} = declaration, attrs) do
-    fields = [
-      :person_id,
-      :is_active,
-      :employee_id,
-    ]
+  defp declaration_changeset(%DeclarationSearch{} = declaration, attrs) do
+    fields = ~W(
+      person_id
+      is_active
+      employee_id
+      legal_entity_id
+    )
 
-    declaration
-    |> cast(attrs, fields)
-    |> validate_any_is_present(fields)
-  end
-
-  defp validate_any_is_present(changeset, fields) do
-    if Enum.any?(fields, &present?(changeset, &1)) do
-      changeset
-    else
-      add_error(changeset, hd(fields), "No search fields were specified correctly")
-    end
-  end
-
-  defp present?(changeset, field) do
-    case fetch_change(changeset, field) do
-      :error -> false
-      {:ok, ""} -> false
-      {:ok, _} -> true
-    end
+    cast(declaration, attrs, fields)
   end
 
   def create_declaration_with_termination_logic(%{"person_id" => person_id} = declaration_params) do
     # TODO: Red Lists
-    changeset = declaration_search_changeset(%Declaration{}, %{"person_id" => person_id, "status" => "active"})
+    changeset = declaration_changeset(%DeclarationSearch{}, %{"person_id" => person_id, "status" => "active"})
 
     query = from d in Declaration,
       where: ^Map.to_list(changeset.changes)

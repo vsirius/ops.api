@@ -9,8 +9,8 @@ defmodule OPS.Web.DeclarationController do
   action_fallback OPS.Web.FallbackController
 
   def index(conn, params) do
-    with {:ok, declarations} <- Declarations.list_declarations(params) do
-      render(conn, "index.json", declarations: declarations)
+    with {declarations, %Ecto.Paging{} = paging} <- Declarations.list_declarations(params) do
+      render(conn, "index.json", declarations: declarations, paging: paging)
     end
   end
 
