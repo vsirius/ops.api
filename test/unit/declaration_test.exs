@@ -1,6 +1,7 @@
 defmodule OPS.DeclarationTest do
   use OPS.DataCase
 
+  alias OPS.AuditLog
   alias OPS.Declarations
   alias OPS.Declarations.Declaration
 
@@ -148,25 +149,28 @@ defmodule OPS.DeclarationTest do
 
   describe "terminate_declarations/1" do
     test "declaration termination is audited" do
-      user_id = "EFD5177B-FCC7-46D5-9162-E4FDE5E4E69"
-      employee_id = "E03B06EA-8E6C-48F9-A720-6F3E9EB5E4EB"
+      user_id = "ab4b2245-55c9-46eb-9ac6-c751020a46e3"
+      employee_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
 
       dec1 = fixture(:declaration)
       dec2 = fixture(:declaration)
       dec3 = fixture(:declaration)
 
-      Repo.update_all(Declaration, %{employee_id: employee_id})
+      Repo.update_all(Declaration, set: [employee_id: employee_id])
 
-      OPS.Declarations.terminate_declarations(employee_id, user_id)
+      OPS.Declarations.terminate_declarations(user_id, employee_id)
 
-      assert %{status: "terminated", updated_by: user_id} =
-        Repo.get(AuditLog, resource: "declaration" resource_id: dec1.id).changeset
+      Enum.each [dec1, dec2, dec3], fn declaration ->
+        declaration = Repo.get(Declaration, declaration.id)
 
-      assert %{status: "terminated", updated_by: user_id} =
-        Repo.get(AuditLog, resource: "declaration" resource_id: dec2.id).changeset
+        assert "terminated" = declaration.status
+        assert ^user_id = declaration.updated_by
 
-      assert %{status: "terminated", updated_by: user_id} =
-        Repo.get(AuditLog, resource: "declaration" resource_id: dec3.id).changeset
+        assert %{
+          "status" => "terminated",
+          "updated_by" => ^user_id
+        } = Repo.get_by(AuditLog, resource: "declaration", resource_id: declaration.id).changeset
+      end
     end
   end
 end

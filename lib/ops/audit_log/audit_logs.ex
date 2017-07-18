@@ -1,6 +1,9 @@
 defmodule OPS.AuditLogs do
   @defmodule false
 
+  alias OPS.Repo
+  import Ecto.{Query, Changeset}
+
   alias OPS.AuditLog
 
   def create_audit_log(attrs \\ %{}) do
@@ -17,7 +20,7 @@ defmodule OPS.AuditLogs do
       changeset
     )a
 
-    declaration
+    audit_log
     |> cast(attrs, fields)
     |> validate_required(fields)
   end

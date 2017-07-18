@@ -8,6 +8,7 @@ defmodule OPS.Declarations do
   alias Ecto.Multi
   alias OPS.Repo
 
+  alias OPS.AuditLogs
   alias OPS.Declarations.Declaration
   alias OPS.Declarations.DeclarationSearch
 
@@ -89,27 +90,29 @@ defmodule OPS.Declarations do
 
   def terminate_declarations(user_id, employee_id) do
     query = from d in Declaration,
-      where: %{employee_id: d.employee_id}
+      where: [employee_id: ^employee_id]
 
-    updates = [status: "terminated"]
+    updates = [status: "terminated", updated_by: user_id]
 
     Multi.new
-    |> Multi.update_all(:terminated_declarations, query, set: updates, returning: [:id])
+    |> Multi.update_all(:terminated_declarations, query, [set: updates], returning: [:id])
     |> Multi.run(:audit_log, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
     |> Repo.transaction()
   end
 
-  def log_updates(user_id, terminated_declarations, updates) do
+  def log_updates(user_id, {_, terminated_declarations}, updates) do
     changeset = Enum.into(updates, %{updated_by: user_id})
 
     # TODO: maybe append to existing multi?
     Enum.each terminated_declarations, fn declaration ->
-      AuditLog.create_audit_log(%{
+      AuditLogs.create_audit_log(%{
         actor_id: user_id,
         resource: "declaration", # ???
         resource_id: declaration.id,
         changeset: changeset
       })
     end
+
+    {:ok, :updates}
   end
 end
