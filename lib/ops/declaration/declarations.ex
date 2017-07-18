@@ -86,4 +86,30 @@ defmodule OPS.Declarations do
     |> Multi.insert(:new_declaration, declaration_changeset(%Declaration{}, declaration_params))
     |> Repo.transaction()
   end
+
+  def terminate_declarations(user_id, employee_id) do
+    query = from d in Declaration,
+      where: %{employee_id: d.employee_id}
+
+    updates = [status: "terminated"]
+
+    Multi.new
+    |> Multi.update_all(:terminated_declarations, query, set: updates, returning: [:id])
+    |> Multi.run(:audit_log, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
+    |> Repo.transaction()
+  end
+
+  def log_updates(user_id, terminated_declarations, updates) do
+    changeset = Enum.into(updates, %{updated_by: user_id})
+
+    # TODO: maybe append to existing multi?
+    Enum.each terminated_declarations, fn declaration ->
+      AuditLog.create_audit_log(%{
+        actor_id: user_id,
+        resource: "declaration", # ???
+        resource_id: declaration.id,
+        changeset: changeset
+      })
+    end
+  end
 end

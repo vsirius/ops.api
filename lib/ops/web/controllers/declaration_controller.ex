@@ -53,11 +53,9 @@ defmodule OPS.Web.DeclarationController do
     end
   end
 
-  def terminate_declarations(conn, %{"id" => employee_id}) do
-    declaration = Declarations.get_declaration!(id)
-    result = Declarations.update_declaration(declaration, declaration_params)
-    with {:ok, %Declaration{} = declaration} <- result do
-      render(conn, "show.json", declaration: declaration)
+  def terminate_declarations(conn, %{"user_id" => user_id, "id" => employee_id}) do
+    with {:ok, okay} <- Declarations.terminate_declarations(user_id, employee_id) do
+      render(conn, "show.json", declaration: okay)
     end
   end
 end

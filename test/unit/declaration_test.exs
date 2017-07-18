@@ -145,4 +145,28 @@ defmodule OPS.DeclarationTest do
     declaration = fixture(:declaration)
     assert %Ecto.Changeset{} = Declarations.change_declaration(declaration)
   end
+
+  describe "terminate_declarations/1" do
+    test "declaration termination is audited" do
+      user_id = "EFD5177B-FCC7-46D5-9162-E4FDE5E4E69"
+      employee_id = "E03B06EA-8E6C-48F9-A720-6F3E9EB5E4EB"
+
+      dec1 = fixture(:declaration)
+      dec2 = fixture(:declaration)
+      dec3 = fixture(:declaration)
+
+      Repo.update_all(Declaration, %{employee_id: employee_id})
+
+      OPS.Declarations.terminate_declarations(employee_id, user_id)
+
+      assert %{status: "terminated", updated_by: user_id} =
+        Repo.get(AuditLog, resource: "declaration" resource_id: dec1.id).changeset
+
+      assert %{status: "terminated", updated_by: user_id} =
+        Repo.get(AuditLog, resource: "declaration" resource_id: dec2.id).changeset
+
+      assert %{status: "terminated", updated_by: user_id} =
+        Repo.get(AuditLog, resource: "declaration" resource_id: dec3.id).changeset
+    end
+  end
 end
