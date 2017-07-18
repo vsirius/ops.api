@@ -1,7 +1,7 @@
 defmodule OPS.DeclarationTest do
   use OPS.DataCase
 
-  alias OPS.AuditLog
+  alias EctoTrail.Changelog
   alias OPS.Declarations
   alias OPS.Declarations.Declaration
 
@@ -169,7 +169,7 @@ defmodule OPS.DeclarationTest do
         assert %{
           "status" => "terminated",
           "updated_by" => ^user_id
-        } = Repo.get_by(AuditLog, resource: "declaration", resource_id: declaration.id).changeset
+        } = Repo.get_by(Changelog, resource: "declaration", resource_id: declaration.id).changeset
       end
     end
   end

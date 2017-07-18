@@ -90,7 +90,7 @@ defmodule OPS.Declarations do
 
   def terminate_declarations(user_id, employee_id) do
     query = from d in Declaration,
-      where: [employee_id: ^employee_id]
+      where: [status: "active", employee_id: ^employee_id]
 
     updates = [status: "terminated", updated_by: user_id]
 
