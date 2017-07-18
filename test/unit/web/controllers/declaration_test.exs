@@ -3,6 +3,7 @@ defmodule OPS.Web.DeclarationControllerTest do
 
   alias OPS.Declarations
   alias OPS.Declarations.Declaration
+  alias OPS.Declarations.DeclarationStatusHistory
 
   @create_attrs %{
     employee_id: Ecto.UUID.generate(),
@@ -106,6 +107,9 @@ defmodule OPS.Web.DeclarationControllerTest do
       "updated_at" => updated_at,
       "updated_by" => @create_attrs.updated_by
     }
+    declaration_status_hstr = Repo.one!(DeclarationStatusHistory)
+    assert declaration_status_hstr.declaration_id == id
+    assert declaration_status_hstr.status == "active"
   end
 
   @tag pending: true
@@ -166,6 +170,10 @@ defmodule OPS.Web.DeclarationControllerTest do
       "updated_at" => updated_at,
       "updated_by" => @update_attrs.updated_by
     }
+    declaration_status_hstrs = Repo.all(DeclarationStatusHistory)
+    assert Enum.all?(declaration_status_hstrs, &(Map.get(&1, :declaration_id) == id))
+    assert 2 = Enum.count(declaration_status_hstrs)
+    assert ~w(active closed) == Enum.map(declaration_status_hstrs, &(Map.get(&1, :status)))
   end
 
   @tag pending: true
