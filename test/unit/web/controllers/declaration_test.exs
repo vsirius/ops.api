@@ -188,12 +188,13 @@ defmodule OPS.Web.DeclarationControllerTest do
     user_id = "ab4b2245-55c9-46eb-9ac6-c751020a46e3"
     employee_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
 
-    dec1 = fixture(:declaration)
-    dec2 = fixture(:declaration)
-    dec3 = fixture(:declaration)
+    dec = fixture(:declaration)
+    Repo.update_all(Declaration, set: [employee_id: employee_id])
 
-    conn = patch "/employees/#{employee_id}/declarations/actions/terminate", %{employee_id: employee_id, user_id: user_id}
+    conn = patch conn, "/employees/#{employee_id}/declarations/actions/terminate", %{employee_id: employee_id, user_id: user_id}
 
-    assert json_response(conn, 200)
+    response = json_response(conn, 200)
+
+    assert [dec.id] == response["data"]["terminated_declarations"]
   end
 end

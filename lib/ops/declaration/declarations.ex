@@ -96,7 +96,7 @@ defmodule OPS.Declarations do
 
     Multi.new
     |> Multi.update_all(:terminated_declarations, query, [set: updates], returning: [:id])
-    |> Multi.run(:audit_log, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
+    |> Multi.run(:logged_terminations, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
     |> Repo.transaction()
   end
 
