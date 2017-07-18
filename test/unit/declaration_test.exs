@@ -1,6 +1,7 @@
 defmodule OPS.DeclarationTest do
   use OPS.DataCase
 
+  alias EctoTrail.Changelog
   alias OPS.Declarations
   alias OPS.Declarations.Declaration
 
@@ -144,5 +145,32 @@ defmodule OPS.DeclarationTest do
   test "change_declaration/1 returns a declaration changeset" do
     declaration = fixture(:declaration)
     assert %Ecto.Changeset{} = Declarations.change_declaration(declaration)
+  end
+
+  describe "terminate_declarations/1" do
+    test "declaration termination is audited" do
+      user_id = "ab4b2245-55c9-46eb-9ac6-c751020a46e3"
+      employee_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
+
+      dec1 = fixture(:declaration)
+      dec2 = fixture(:declaration)
+      dec3 = fixture(:declaration)
+
+      Repo.update_all(Declaration, set: [employee_id: employee_id])
+
+      OPS.Declarations.terminate_declarations(user_id, employee_id)
+
+      Enum.each [dec1, dec2, dec3], fn declaration ->
+        declaration = Repo.get(Declaration, declaration.id)
+
+        assert "terminated" = declaration.status
+        assert ^user_id = declaration.updated_by
+
+        assert %{
+          "status" => "terminated",
+          "updated_by" => ^user_id
+        } = Repo.get_by(Changelog, resource: "declaration", resource_id: declaration.id).changeset
+      end
+    end
   end
 end

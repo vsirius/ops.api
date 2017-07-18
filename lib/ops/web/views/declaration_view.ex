@@ -31,4 +31,8 @@ defmodule OPS.Web.DeclarationView do
        updated_by: declaration.updated_by,
     }
   end
+
+  def render("terminated_declarations.json", %{declarations: declarations}) do
+    %{terminated_declarations: declarations}
+  end
 end

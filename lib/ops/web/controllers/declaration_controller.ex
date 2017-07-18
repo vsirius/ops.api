@@ -52,4 +52,10 @@ defmodule OPS.Web.DeclarationController do
       {:error, _transaction_step, changeset, _} -> {:error, changeset}
     end
   end
+
+  def terminate_declarations(conn, %{"user_id" => user_id, "id" => employee_id}) do
+    with {:ok, result} <- Declarations.terminate_declarations(user_id, employee_id) do
+      render(conn, "terminated_declarations.json", declarations: result.logged_terminations)
+    end
+  end
 end
