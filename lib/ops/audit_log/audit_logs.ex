@@ -4,15 +4,15 @@ defmodule OPS.AuditLogs do
   alias OPS.Repo
   import Ecto.{Query, Changeset}
 
-  alias OPS.AuditLog
+  alias EctoTrail.Changelog
 
   def create_audit_log(attrs \\ %{}) do
-    %AuditLog{}
+    %Changelog{}
     |> audit_log_changeset(attrs)
     |> Repo.insert
   end
 
-  def audit_log_changeset(%AuditLog{} = audit_log, attrs) do
+  def audit_log_changeset(%Changelog{} = audit_log, attrs) do
     fields = ~W(
       actor_id
       resource

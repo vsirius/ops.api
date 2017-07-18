@@ -103,12 +103,11 @@ defmodule OPS.Declarations do
   def log_updates(user_id, {_, terminated_declarations}, updates) do
     changeset = Enum.into(updates, %{updated_by: user_id})
 
-    # TODO: maybe append to existing multi?
     updates =
       Enum.reduce terminated_declarations, [], fn declaration, acc ->
         AuditLogs.create_audit_log(%{
           actor_id: user_id,
-          resource: "declaration", # ???
+          resource: "declaration",
           resource_id: declaration.id,
           changeset: changeset
         })
