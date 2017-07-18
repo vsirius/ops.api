@@ -191,7 +191,8 @@ defmodule OPS.Web.DeclarationControllerTest do
     dec = fixture(:declaration)
     Repo.update_all(Declaration, set: [employee_id: employee_id])
 
-    conn = patch conn, "/employees/#{employee_id}/declarations/actions/terminate", %{employee_id: employee_id, user_id: user_id}
+    payload = %{employee_id: employee_id, user_id: user_id}
+    conn = patch conn, "/employees/#{employee_id}/declarations/actions/terminate", payload
 
     response = json_response(conn, 200)
 

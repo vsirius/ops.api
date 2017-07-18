@@ -1,5 +1,5 @@
 defmodule OPS.AuditLogs do
-  @defmodule false
+  @moduledoc false
 
   alias OPS.Repo
   import Ecto.{Query, Changeset}
