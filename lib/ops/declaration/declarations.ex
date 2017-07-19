@@ -55,6 +55,7 @@ defmodule OPS.Declarations do
       scope
       division_id
       legal_entity_id
+      declaration_request_id
     )a
 
     declaration

@@ -18,6 +18,7 @@ defmodule OPS.Web.DeclarationControllerTest do
     scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
     legal_entity_id: Ecto.UUID.generate(),
+    declaration_request_id: Ecto.UUID.generate()
   }
 
   @update_attrs %{
