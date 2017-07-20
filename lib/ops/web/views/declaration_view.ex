@@ -25,6 +25,7 @@ defmodule OPS.Web.DeclarationView do
        end_date: declaration.end_date,
        signed_at: declaration.signed_at,
        status: declaration.status,
+       declaration_request_id: declaration.declaration_request_id,
        inserted_at: declaration.inserted_at,
        created_by: declaration.created_by,
        updated_at: declaration.updated_at,
