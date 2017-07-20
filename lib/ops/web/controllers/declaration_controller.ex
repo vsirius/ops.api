@@ -38,6 +38,19 @@ defmodule OPS.Web.DeclarationController do
     end
   end
 
+  def reject(conn, %{"declaration_id" => id}) do
+    declaration = Declarations.get_declaration!(id)
+
+    case Declarations.reject_declaration(declaration) do
+      {:ok, %Declaration{} = declaration} ->
+        render(conn, "show.json", declaration: declaration)
+      {:error, changeset} ->
+        conn
+        |> put_status(422)
+        |> render("invalid_transition.json")
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     declaration = Declarations.get_declaration!(id)
     with {:ok, %Declaration{}} <- Declarations.delete_declaration(declaration) do

@@ -36,4 +36,10 @@ defmodule OPS.Web.DeclarationView do
   def render("terminated_declarations.json", %{declarations: declarations}) do
     %{terminated_declarations: declarations}
   end
+
+  def render("invalid_transition.json", _conn) do
+    %{
+      "message": "Invalid transition"
+    }
+  end
 end

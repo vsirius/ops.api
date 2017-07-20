@@ -24,7 +24,13 @@ defmodule OPS.Web.Router do
   scope "/", OPS.Web do
     pipe_through :api
 
-    resources "/declarations", DeclarationController
+    resources "/declarations", DeclarationController do
+      scope "/actions" do
+        patch "/verify", DeclarationController, :verify
+        patch "/reject", DeclarationController, :reject
+      end
+    end
+
     get "/reports/declarations", DeclarationReportController, :declarations
     post "/declarations/with_termination", DeclarationController, :create_with_termination_logic
     patch "/employees/:id/declarations/actions/terminate", DeclarationController, :terminate_declarations

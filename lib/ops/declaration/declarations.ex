@@ -61,6 +61,7 @@ defmodule OPS.Declarations do
     declaration
     |> cast(attrs, fields)
     |> validate_required(fields)
+    |> validate_state_transition()
     |> validate_inclusion(:scope, ["family_doctor"])
     |> validate_inclusion(:status, ["active", "closed", "terminated", "pending_verification"])
   end
@@ -117,5 +118,13 @@ defmodule OPS.Declarations do
       end
 
     {:ok, updates}
+  end
+
+  def reject_declaration(declaration) do
+    declaration
+    |> change
+    |> validate_acceptance(:is_active)
+    |> validate_inclusion(:status, ["pending_verification"])
+    |> Repo.update
   end
 end
