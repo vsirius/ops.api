@@ -113,28 +113,42 @@ defmodule OPS.DeclarationTest do
     end
   end
 
-  test "update_declaration/2 with valid data updates the declaration" do
-    declaration = fixture(:declaration)
-    assert {:ok, declaration} = Declarations.update_declaration(declaration, @update_attrs)
-    assert %Declaration{} = declaration
+  describe "update_declaration/2" do
+    test "updates the declaration when data is valid" do
+      declaration = fixture(:declaration)
+      assert {:ok, declaration} = Declarations.update_declaration(declaration, @update_attrs)
+      assert %Declaration{} = declaration
 
-    assert declaration.person_id == @update_attrs["person_id"]
-    assert declaration.start_date
-    assert declaration.end_date
-    assert declaration.status == "closed"
-    assert declaration.scope == "family_doctor"
-    assert declaration.signed_at
-    assert declaration.created_by == @update_attrs["created_by"]
-    assert declaration.updated_by == @update_attrs["updated_by"]
-    refute declaration.is_active
-    assert declaration.employee_id == @update_attrs["employee_id"]
-    assert declaration.legal_entity_id == @update_attrs["legal_entity_id"]
-  end
+      assert declaration.person_id == @update_attrs["person_id"]
+      assert declaration.start_date
+      assert declaration.end_date
+      assert declaration.status == "closed"
+      assert declaration.scope == "family_doctor"
+      assert declaration.signed_at
+      assert declaration.created_by == @update_attrs["created_by"]
+      assert declaration.updated_by == @update_attrs["updated_by"]
+      refute declaration.is_active
+      assert declaration.employee_id == @update_attrs["employee_id"]
+      assert declaration.legal_entity_id == @update_attrs["legal_entity_id"]
+    end
 
-  test "update_declaration/2 with invalid data returns error changeset" do
-    declaration = fixture(:declaration)
-    assert {:error, %Ecto.Changeset{}} = Declarations.update_declaration(declaration, @invalid_attrs)
-    assert declaration == Declarations.get_declaration!(declaration.id)
+    test "returns error when data is valid" do
+      declaration = fixture(:declaration)
+      assert {:error, %Ecto.Changeset{}} = Declarations.update_declaration(declaration, @invalid_attrs)
+      assert declaration == Declarations.get_declaration!(declaration.id)
+    end
+
+    test "successfully transitions declaration to a new status" do
+      declaration = fixture(:declaration, Map.put(@create_attrs, "status", "pending_verification"))
+      update_result = Declarations.update_declaration(declaration, %{"status" => "active"})
+      assert update_result.valid?
+
+
+    end
+
+    test "returns error when status transition is not correct" do
+
+    end
   end
 
   test "delete_declaration/1 deletes the declaration" do

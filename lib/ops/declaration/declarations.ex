@@ -127,4 +127,11 @@ defmodule OPS.Declarations do
     |> validate_inclusion(:status, ["pending_verification"])
     |> Repo.update
   end
+
+  def validate_state_transition(changeset) do
+    changeset
+    # take existing state
+    # compare it with changed state
+    #
+  end
 end
