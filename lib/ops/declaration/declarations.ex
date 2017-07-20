@@ -125,6 +125,7 @@ defmodule OPS.Declarations do
     {_, to} = fetch_field(changeset, :status)
 
     valid_transitions = [
+      {"active", "closed"},
       {"pending_verification", "active"},
       {"pending_verification", "rejected"}
     ]
