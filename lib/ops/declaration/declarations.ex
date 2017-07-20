@@ -120,14 +120,6 @@ defmodule OPS.Declarations do
     {:ok, updates}
   end
 
-  def reject_declaration(declaration) do
-    declaration
-    |> change
-    |> validate_acceptance(:is_active)
-    |> validate_inclusion(:status, ["pending_verification"])
-    |> Repo.update
-  end
-
   def validate_status_transition(changeset) do
     from = changeset.data.status
     {_, to} = fetch_field(changeset, :status)
