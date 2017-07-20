@@ -132,22 +132,24 @@ defmodule OPS.DeclarationTest do
       assert declaration.legal_entity_id == @update_attrs["legal_entity_id"]
     end
 
-    test "returns error when data is valid" do
-      declaration = fixture(:declaration)
+    test "returns error when data is not valid" do
+      declaration = fixture(:declaration, Map.put(@create_attrs, "status", "pending_verification"))
       assert {:error, %Ecto.Changeset{}} = Declarations.update_declaration(declaration, @invalid_attrs)
       assert declaration == Declarations.get_declaration!(declaration.id)
     end
 
     test "successfully transitions declaration to a new status" do
       declaration = fixture(:declaration, Map.put(@create_attrs, "status", "pending_verification"))
-      update_result = Declarations.update_declaration(declaration, %{"status" => "active"})
-      assert update_result.valid?
 
-
+      {:ok, update_result} = Declarations.update_declaration(declaration, %{"status" => "active", "updated_by" => Ecto.UUID.generate()})
     end
 
     test "returns error when status transition is not correct" do
+      declaration = fixture(:declaration, Map.put(@create_attrs, "status", "active"))
 
+      {:error, changeset} = Declarations.update_declaration(declaration, %{"status" => "pending_verification", "updated_by" => Ecto.UUID.generate()})
+
+      assert "Incorrect status transition." = elem(changeset.errors[:status], 0)
     end
   end
 
