@@ -2,6 +2,7 @@
   configs: [
     %{
       name: "default",
+      color: true,
       files: %{
         included: ["lib/"],
         excluded: ["lib/ops/tasks.ex"]
