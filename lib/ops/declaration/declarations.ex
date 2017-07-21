@@ -61,6 +61,7 @@ defmodule OPS.Declarations do
     declaration
     |> cast(attrs, fields)
     |> validate_required(fields)
+    |> validate_status_transition()
     |> validate_inclusion(:scope, ["family_doctor"])
     |> validate_inclusion(:status, ["active", "closed", "terminated", "pending_verification"])
   end
@@ -117,5 +118,22 @@ defmodule OPS.Declarations do
       end
 
     {:ok, updates}
+  end
+
+  def validate_status_transition(changeset) do
+    from = changeset.data.status
+    {_, to} = fetch_field(changeset, :status)
+
+    valid_transitions = [
+      {"active", "closed"},
+      {"pending_verification", "active"},
+      {"pending_verification", "rejected"}
+    ]
+
+    if {from, to} in valid_transitions || is_nil(from) do
+      changeset
+    else
+      add_error(changeset, :status, "Incorrect status transition.")
+    end
   end
 end
