@@ -170,7 +170,8 @@ defmodule OPS.Web.DeclarationControllerTest do
       "inserted_at" => inserted_at,
       "created_by" => @update_attrs.created_by,
       "updated_at" => updated_at,
-      "updated_by" => @update_attrs.updated_by
+      "updated_by" => @update_attrs.updated_by,
+      "is_active" => false
     }
     declaration_status_hstrs = Repo.all(DeclarationStatusHistory)
     assert Enum.all?(declaration_status_hstrs, &(Map.get(&1, :declaration_id) == id))

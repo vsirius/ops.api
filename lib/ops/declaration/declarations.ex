@@ -63,7 +63,7 @@ defmodule OPS.Declarations do
     |> validate_required(fields)
     |> validate_status_transition()
     |> validate_inclusion(:scope, ["family_doctor"])
-    |> validate_inclusion(:status, ["active", "closed", "terminated", "pending_verification"])
+    |> validate_inclusion(:status, ["active", "closed", "terminated", "rejected", "pending_verification"])
   end
 
   defp declaration_changeset(%DeclarationSearch{} = declaration, attrs) do
@@ -125,6 +125,7 @@ defmodule OPS.Declarations do
     {_, to} = fetch_field(changeset, :status)
 
     valid_transitions = [
+      {"active", "terminated"},
       {"active", "closed"},
       {"pending_verification", "active"},
       {"pending_verification", "rejected"}
