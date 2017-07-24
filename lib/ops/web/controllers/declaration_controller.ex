@@ -30,7 +30,7 @@ defmodule OPS.Web.DeclarationController do
     render(conn, "show.json", declaration: declaration)
   end
 
-  def update(conn, %{"id" => id} = declaration_params) do
+  def update(conn, %{"id" => id, "declaration" => declaration_params}) do
     declaration = Declarations.get_declaration!(id)
     result = Declarations.update_declaration(declaration, declaration_params)
     with {:ok, %Declaration{} = declaration} <- result do
