@@ -30,6 +30,7 @@ defmodule OPS.Web.DeclarationView do
        created_by: declaration.created_by,
        updated_at: declaration.updated_at,
        updated_by: declaration.updated_by,
+       is_active: declaration.is_active
     }
   end
 

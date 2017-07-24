@@ -107,11 +107,11 @@ defmodule OPS.Web.DeclarationControllerTest do
       "inserted_at" => inserted_at,
       "created_by" => @create_attrs.created_by,
       "updated_at" => updated_at,
-      "updated_by" => @create_attrs.updated_by
+      "updated_by" => @create_attrs.updated_by,
+      "is_active" => true
     }
     declaration_status_hstr = Repo.one!(DeclarationStatusHistory)
     assert declaration_status_hstr.declaration_id == id
-    assert declaration_status_hstr.status == "active"
   end
 
   test "does not create declaration and renders errors when data is invalid", %{conn: conn} do
