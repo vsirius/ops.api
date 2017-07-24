@@ -127,7 +127,7 @@ defmodule OPS.Declarations do
     valid_transitions = [
       {"active", "closed"},
       {"pending_verification", "active"},
-      {"pending_verification", "rejected"}
+      {"pending_verification", "closed"}
     ]
 
     if {from, to} in valid_transitions || is_nil(from) do
