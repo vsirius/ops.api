@@ -114,7 +114,6 @@ defmodule OPS.Web.DeclarationControllerTest do
     assert declaration_status_hstr.status == "active"
   end
 
-  @tag pending: true
   test "does not create declaration and renders errors when data is invalid", %{conn: conn} do
     conn = post conn, declaration_path(conn, :create), declaration: @invalid_attrs
     assert json_response(conn, 422)["errors"] != %{}
