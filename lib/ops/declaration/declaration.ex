@@ -17,6 +17,7 @@ defmodule OPS.Declarations.Declaration do
     field :division_id, Ecto.UUID
     field :legal_entity_id, Ecto.UUID
     field :declaration_request_id, Ecto.UUID
+    field :seed, :string
 
     timestamps(type: :utc_datetime)
   end

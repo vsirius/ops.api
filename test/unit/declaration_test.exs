@@ -18,7 +18,8 @@ defmodule OPS.DeclarationTest do
     "scope" => "family_doctor",
     "division_id" => Ecto.UUID.generate(),
     "legal_entity_id" => Ecto.UUID.generate(),
-    "declaration_request_id" => Ecto.UUID.generate()
+    "declaration_request_id" => Ecto.UUID.generate(),
+    "seed" => "some_seed"
   }
 
   @update_attrs %{

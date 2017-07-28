@@ -16,7 +16,8 @@ defmodule OPS.Declaration.ReportTest do
     scope: "family_doctor",
     division_id: Ecto.UUID.generate(),
     legal_entity_id: Ecto.UUID.generate(),
-    declaration_request_id: Ecto.UUID.generate()
+    declaration_request_id: Ecto.UUID.generate(),
+    seed: Ecto.UUID.generate()
   }
 
   def fixture(:declaration, attrs \\ @create_attrs) do

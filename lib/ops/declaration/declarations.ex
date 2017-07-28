@@ -56,6 +56,7 @@ defmodule OPS.Declarations do
       division_id
       legal_entity_id
       declaration_request_id
+      seed
     )a
 
     declaration
