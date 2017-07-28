@@ -20,3 +20,8 @@ config :logger, level: :warn
 
 # Run acceptance test in concurrent mode
 config :ops, sql_sandbox: true
+
+# Configures declaration terminator
+config :ops, OPS.DeclarationTerminator,
+  frequency: 100,
+  utc_interval: {0, 23}

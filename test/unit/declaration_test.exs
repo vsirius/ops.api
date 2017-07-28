@@ -142,7 +142,7 @@ defmodule OPS.DeclarationTest do
     test "successfully transitions declaration to a new status" do
       declaration = fixture(:declaration, Map.put(@create_attrs, "status", "pending_verification"))
       updates = %{"status" => "active", "updated_by" => Ecto.UUID.generate()}
-      {:ok, update_result} = Declarations.update_declaration(declaration, updates)
+      {:ok, _update_result} = Declarations.update_declaration(declaration, updates)
     end
 
     test "returns error when status transition is not correct" do

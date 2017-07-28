@@ -48,6 +48,11 @@ config :ops, OPS.Web.Endpoint,
   secret_key_base: "4LcL78vtzM1yVeVCuY1351HuU/62qpTtDKykdJxAKKgwnTtH5JzkXNEUouzDBc1D",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
 
+# Configures declaration terminator
+config :ops, OPS.DeclarationTerminator,
+  frequency: 24 * 60 * 60 * 1000,
+  utc_interval: {21, 4}
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

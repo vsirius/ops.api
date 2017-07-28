@@ -2,6 +2,12 @@ defmodule OPS.Declarations.Declaration do
   @moduledoc false
   use Ecto.Schema
 
+  @status_active "active"
+  @status_closed "closed"
+  @status_terminated "terminated"
+  @status_rejected "rejected"
+  @status_pending "pending_verification"
+
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "declarations" do
     field :employee_id, Ecto.UUID
@@ -21,4 +27,10 @@ defmodule OPS.Declarations.Declaration do
 
     timestamps(type: :utc_datetime)
   end
+
+  def status(:active), do: @status_active
+  def status(:closed), do: @status_closed
+  def status(:terminated), do: @status_terminated
+  def status(:rejected), do: @status_rejected
+  def status(:pending), do: @status_pending
 end
