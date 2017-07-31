@@ -64,7 +64,16 @@ defmodule OPS.Declarations do
     |> validate_required(fields)
     |> validate_status_transition()
     |> validate_inclusion(:scope, ["family_doctor"])
-    |> validate_inclusion(:status, ["active", "closed", "terminated", "rejected", "pending_verification"])
+    |> validate_inclusion(:status, Enum.map(
+      ~w(
+        active
+        closed
+        terminated
+        rejected
+        pending
+      )a,
+      &Declaration.status/1
+    ))
   end
 
   defp declaration_changeset(%DeclarationSearch{} = declaration, attrs) do
@@ -86,11 +95,21 @@ defmodule OPS.Declarations do
       where: ^Map.to_list(changeset.changes)
 
     Multi.new()
-    |> Multi.update_all(:previous_declarations, query, set: [status: "terminated"])
+    |> Multi.update_all(:previous_declarations, query, set: [status: Declaration.status(:terminated)])
     |> Multi.insert(:new_declaration, declaration_changeset(%Declaration{}, declaration_params))
     |> Repo.transaction()
   end
 
+  def terminate_declarations do
+    query =
+      Declaration
+      |> where([d], fragment("?::date < now()::date", d.end_date))
+      |> where([d], not d.status in ^[Declaration.status(:closed), Declaration.status(:terminated)])
+
+    Multi.new()
+    |> Multi.update_all(:declarations, query, set: [status: Declaration.status(:closed)])
+    |> Repo.transaction()
+  end
   def terminate_declarations(user_id, employee_id) do
     query = from d in Declaration,
       where: [status: "active", employee_id: ^employee_id]

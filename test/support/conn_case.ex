@@ -22,6 +22,7 @@ defmodule OPS.Web.ConnCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import OPS.Factory
       alias OPS.Repo
 
       # The default endpoint for testing
