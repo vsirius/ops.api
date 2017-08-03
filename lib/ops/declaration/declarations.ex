@@ -121,6 +121,17 @@ defmodule OPS.Declarations do
     |> Multi.run(:logged_terminations, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
     |> Repo.transaction()
   end
+  def terminate_person_declarations(user_id, person_id) do
+    query = from d in Declaration,
+      where: [status: "active", person_id: ^person_id]
+
+    updates = [status: "terminated", updated_by: user_id]
+
+    Multi.new
+    |> Multi.update_all(:terminated_declarations, query, [set: updates], returning: [:id])
+    |> Multi.run(:logged_terminations, fn multi -> log_updates(user_id, multi.terminated_declarations, updates) end)
+    |> Repo.transaction()
+  end
 
   def log_updates(user_id, {_, terminated_declarations}, updates) do
     changeset = Enum.into(updates, %{updated_by: user_id})

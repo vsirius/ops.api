@@ -191,4 +191,31 @@ defmodule OPS.DeclarationTest do
       end
     end
   end
+
+  describe "terminate_person_declarations/1" do
+    test "terminates person declarations" do
+      user_id = Confex.get(:ops, :declaration_terminator_user)
+      person_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
+
+      dec1 = fixture(:declaration)
+      dec2 = fixture(:declaration)
+      dec3 = fixture(:declaration)
+
+      Repo.update_all(Declaration, set: [person_id: person_id])
+
+      OPS.Declarations.terminate_person_declarations(user_id, person_id)
+
+      Enum.each [dec1, dec2, dec3], fn declaration ->
+        declaration = Repo.get(Declaration, declaration.id)
+
+        assert "terminated" = declaration.status
+        assert ^user_id = declaration.updated_by
+
+        assert %{
+          "status" => "terminated",
+          "updated_by" => ^user_id
+        } = Repo.get_by(Changelog, resource: "declaration", resource_id: declaration.id).changeset
+      end
+    end
+  end
 end
