@@ -194,7 +194,7 @@ defmodule OPS.DeclarationTest do
 
   describe "terminate_person_declarations/1" do
     test "terminates person declarations" do
-      user_id = "ab4b2245-55c9-46eb-9ac6-c751020a46e3"
+      user_id = Confex.get(:ops, :declaration_terminator_user)
       person_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
 
       dec1 = fixture(:declaration)
