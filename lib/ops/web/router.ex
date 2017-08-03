@@ -28,5 +28,6 @@ defmodule OPS.Web.Router do
     get "/reports/declarations", DeclarationReportController, :declarations
     post "/declarations/with_termination", DeclarationController, :create_with_termination_logic
     patch "/employees/:id/declarations/actions/terminate", DeclarationController, :terminate_declarations
+    patch "/persons/:id/declarations/actions/terminate", DeclarationController, :terminate_person_declarations
   end
 end

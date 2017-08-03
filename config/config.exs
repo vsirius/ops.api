@@ -48,6 +48,9 @@ config :ops, OPS.Web.Endpoint,
   secret_key_base: "4LcL78vtzM1yVeVCuY1351HuU/62qpTtDKykdJxAKKgwnTtH5JzkXNEUouzDBc1D",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
 
+config :ops, :declaration_terminator_user,
+  {:system, "DECLARATION_TERMINATOR", "48ca528f-0d05-4811-ac49-a249f5309d3e"}
+
 # Configures declaration terminator
 config :ops, OPS.DeclarationTerminator,
   frequency: 24 * 60 * 60 * 1000,
