@@ -197,6 +197,8 @@ defmodule OPS.DeclarationTest do
       user_id = Confex.get(:ops, :declaration_terminator_user)
       person_id = "84e30a11-94bd-49fe-8b1f-f5511c5916d6"
 
+      # TODO: make statuses differennt. termination should pick up an terminate declarations
+      # in all statuses
       dec1 = fixture(:declaration)
       dec2 = fixture(:declaration)
       dec3 = fixture(:declaration)
