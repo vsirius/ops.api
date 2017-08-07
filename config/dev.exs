@@ -10,7 +10,8 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :ops, OPS.Web.Endpoint,
-  http: [port: 4000],
+  on_init: {OPS.Web.Endpoint, :load_from_system_env, []},
+  http: [port: {:system, "PORT", 4000}],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
