@@ -51,7 +51,7 @@ config :ops, OPS.Web.Endpoint,
 # Configures declaration terminator
 config :ops, OPS.DeclarationTerminator,
   frequency: 24 * 60 * 60 * 1000,
-  utc_interval: {21, 4}
+  utc_interval: {0, 4}
 
 # Configures Elixir's Logger
 config :logger, :console,
