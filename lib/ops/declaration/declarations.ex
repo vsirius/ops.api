@@ -43,6 +43,7 @@ defmodule OPS.Declarations do
 
   defp declaration_changeset(%Declaration{} = declaration, attrs) do
     fields = ~W(
+      id
       employee_id
       person_id
       start_date

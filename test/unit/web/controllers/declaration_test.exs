@@ -6,6 +6,7 @@ defmodule OPS.Web.DeclarationControllerTest do
   alias OPS.Declarations.DeclarationStatusHistory
 
   @create_attrs %{
+    id: Ecto.UUID.generate(),
     employee_id: Ecto.UUID.generate(),
     person_id: Ecto.UUID.generate(),
     start_date: "2016-10-10",
@@ -44,6 +45,7 @@ defmodule OPS.Web.DeclarationControllerTest do
   def fixture(:declaration, attrs \\ @create_attrs) do
     create_attrs =
       attrs
+      |> Map.put(:id, Ecto.UUID.generate())
       |> Map.put(:employee_id, Ecto.UUID.generate())
       |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
@@ -92,6 +94,7 @@ defmodule OPS.Web.DeclarationControllerTest do
     conn = post conn, declaration_path(conn, :create), declaration: @create_attrs
     assert %{"id" => id, "inserted_at" => inserted_at, "updated_at" => updated_at} = json_response(conn, 201)["data"]
 
+    assert id == @create_attrs.id
     conn = get conn, declaration_path(conn, :show, id)
     assert json_response(conn, 200)["data"] == %{
       "id" => id,

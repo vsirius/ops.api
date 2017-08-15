@@ -23,6 +23,7 @@ defmodule OPS.Declaration.ReportTest do
   def fixture(:declaration, attrs \\ @create_attrs) do
     create_attrs =
       attrs
+      |> Map.put(:id, Ecto.UUID.generate())
       |> Map.put(:employee_id, Ecto.UUID.generate())
       |> Map.put(:legal_entity_id, Ecto.UUID.generate())
 
