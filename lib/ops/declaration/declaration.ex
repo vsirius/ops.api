@@ -8,7 +8,7 @@ defmodule OPS.Declarations.Declaration do
   @status_rejected "rejected"
   @status_pending "pending_verification"
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, :binary_id, autogenerate: false}
   schema "declarations" do
     field :employee_id, Ecto.UUID
     field :person_id, Ecto.UUID

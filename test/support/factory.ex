@@ -10,6 +10,7 @@ defmodule OPS.Factory do
     start_date = NaiveDateTime.utc_now() |> NaiveDateTime.add(-10 * day, :seconds)
     end_date = NaiveDateTime.add(start_date, day, :seconds)
     %Declaration{
+      id: Ecto.UUID.generate(),
       declaration_request_id: Ecto.UUID.generate,
       start_date: start_date,
       end_date: end_date,
