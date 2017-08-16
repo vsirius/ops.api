@@ -2,6 +2,7 @@
   "id": "6edc7175-86a7-424c-98fa-468a548c1ca6",
   "scope": "family_doctor",
   "person": {
+    "id": "45bd0e3e-b6bc-4d96-89fb-adfff12377f2",
     "email": "email@example.com",
     "gender": "MALE",
     "phones": [

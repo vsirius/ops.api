@@ -3,8 +3,11 @@ insert into seeds (hash, inserted_at) values ('Слава Украине!', now(
 for i in 1..365 do
   seed = select hash from seeds order by inserted_at desc limit 1;
 
-  generate up to 10_000 declarations via lucapette/fakedata in a FILE
-  (make sure "seed" is in each of 10_000 declarations, use it during generation)
+  # TODO: generate up to 10_000 declarations via truly random lucapette/fakedata in a FILE
+  make 10_000
+    - declaration, same. include seed # UPDATE: make this using lucapette/fakedata
+    - sign each declaration
+    (make sure "seed" is in each of 10_000 declarations, use it during generation)
 
   put declaration into "declarations" table (only IDs, design after current declaration table) - with seed
   create create_signed_content via openssl, put signed_content into declaration_signed table - with seed
