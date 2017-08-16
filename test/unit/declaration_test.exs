@@ -6,6 +6,7 @@ defmodule OPS.DeclarationTest do
   alias OPS.Declarations.Declaration
 
   @create_attrs %{
+    "id" => Ecto.UUID.generate(),
     "employee_id" => Ecto.UUID.generate(),
     "person_id" => Ecto.UUID.generate(),
     "start_date" => "2016-10-10",
@@ -44,6 +45,7 @@ defmodule OPS.DeclarationTest do
   def fixture(:declaration, attrs \\ @create_attrs) do
     create_attrs =
       attrs
+      |> Map.put("id", Ecto.UUID.generate())
       |> Map.put("employee_id", Ecto.UUID.generate())
       |> Map.put("legal_entity_id", Ecto.UUID.generate())
 
@@ -65,11 +67,12 @@ defmodule OPS.DeclarationTest do
   test "create_declaration/1 with valid data creates a declaration" do
     create_attrs =
       @create_attrs
+      |> Map.put("id", Ecto.UUID.generate())
       |> Map.put("employee_id", Ecto.UUID.generate())
       |> Map.put("legal_entity_id", Ecto.UUID.generate())
 
     assert {:ok, %Declaration{} = declaration} = Declarations.create_declaration(create_attrs)
-
+    assert declaration.id == create_attrs["id"]
     assert declaration.person_id == create_attrs["person_id"]
     assert declaration.start_date
     assert declaration.end_date
