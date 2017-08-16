@@ -1,12 +1,14 @@
 require 'pg'
 require 'json'
 
-template = JSON.parse(File.read('output_nice.json'))
+template_file = File.read('output_nice.json')
+template = JSON.parse(template_file)
 
 conn = PG.connect(dbname: 'ops_dev')
 
 2.times do |i|
-  seed = "1234"
+  seed = conn.exec("SELECT hash FROM seeds ORDER BY inserted_at DESC LIMIT 1").map { |row| row["hash"] }[0]
+
   conn.exec("
     INSERT INTO declarations (
       id,
