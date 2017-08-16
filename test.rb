@@ -50,4 +50,7 @@ conn = PG.connect(dbname: 'ops_dev')
   )
 
   conn.exec("INSERT INTO signed_declarations (id, signed_data) VALUES (uuid_generate_v4(), '#{template}')")
+
+  # TODO: new_hash should be calculated in PG
+  conn.exec("INSERT INTO seeds VALUES (uuid_generate_v4(), '#{new_hash}', now());")
 end
