@@ -67,30 +67,18 @@ DAYS.times do |day|
     )
   end
 
-  # TODO: include new column here
   conn.exec("
-    INSERT INTO seeds (hash, debug, inserted_at) VALUES (
-      (SELECT
-        digest(
-          ARRAY_TO_STRING(ARRAY_AGG(
-            CONCAT(
-              id,
-              employee_id
-            ) ORDER BY inserted_at ASC
-          ), ''),
-          'sha512'
-        ) FROM declarations WHERE DATE(inserted_at) = '#{today}'
-      ),
-      (SELECT
+    WITH concat AS (
+      SELECT
         ARRAY_TO_STRING(ARRAY_AGG(
           CONCAT(
             id,
             employee_id
           ) ORDER BY inserted_at ASC
-        ), '') FROM declarations WHERE DATE(inserted_at) = '#{today}'
-      ),
-      '#{today} 23:59:59'
+        ), '') AS value FROM declarations WHERE DATE(inserted_at) = '#{today}'
     )
+    INSERT INTO seeds (hash, debug, inserted_at)
+    SELECT digest(value, 'sha512'), value, '#{today} 23:59:59' FROM concat;
   ")
 
   puts "Day #{today}: generated #{samples} declarations."
@@ -99,19 +87,30 @@ end
 # Verify
 
 sql = "
-  SELECT hash AS expected_hash,
-         digest(
-           ARRAY_TO_STRING(ARRAY_AGG(
-             concat(
-               d.id
-             ) ORDER BY d.inserted_at ASC
-           ), ''),
-           'sha512'
-         ) AS actual_hash,
-         count(1)
+  SELECT
     FROM seeds s
     JOIN declarations d ON d.seed = s.hash
 GROUP BY hash
 "
 
 conn.exec(sql)
+
+SELECT
+  DATE(inserted_at),
+
+  ARRAY_TO_STRING(ARRAY_AGG(
+    CONCAT(
+      id,
+      employee_id
+    ) ORDER BY inserted_at ASC
+  ), '') AS value,
+
+  DATE(inserted_at),
+  digest(ARRAY_TO_STRING(ARRAY_AGG(
+    CONCAT(
+      id,
+      employee_id
+    ) ORDER BY inserted_at ASC
+  ), ''), 'sha512') AS digest_value
+
+FROM declarations WHERE DATE(inserted_at) = '2014-01-07' GROUP BY DATE(inserted_at)
