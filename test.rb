@@ -12,9 +12,8 @@ PER_DAY = 100..200
 conn.exec("
   DELETE FROM seeds;
   DELETE FROM declarations;
-  DELETE FROM signed_declarations;
 
-  INSERT INTO seeds (id, hash, inserted_at) VALUES (uuid_generate_v4(), digest('Слава Україні!', 'sha512'), '2014-01-01 23:59:59');
+  INSERT INTO seeds (hash, inserted_at) VALUES (digest('Слава Україні!', 'sha512'), '2014-01-01 23:59:59');
 ")
 
 DAYS.times do |day|
@@ -25,18 +24,6 @@ DAYS.times do |day|
   samples = PER_DAY.to_a.sample
 
   samples.times do |_declaration|
-    # TODO: drop this table and instead add a column to declarations table
-    # TODO: include seed value in template_file json
-    conn.exec("
-      INSERT INTO signed_declarations (
-        id,
-        signed_data
-      ) VALUES (
-        uuid_generate_v4(),
-        '#{template_file}'
-      );
-    ")
-
     conn.exec("
       INSERT INTO declarations (
         id,
@@ -55,6 +42,7 @@ DAYS.times do |day|
         inserted_at,
         updated_at,
         declaration_request_id,
+        signed_data,
         seed
       ) VALUES (
         uuid_generate_v4(),
@@ -73,17 +61,15 @@ DAYS.times do |day|
         '#{today}',
         '#{today}',
         '3BA18EA0-09A7-4D5D-9330-029E02DD29AB',
+        '#{template_file}',
         '#{seed}'
       )"
     )
-
-    conn.exec("INSERT INTO signed_declarations (id, signed_data) VALUES (uuid_generate_v4(), '#{template}')")
   end
 
   # TODO: include new column here
   conn.exec("
     INSERT INTO seeds VALUES (
-      uuid_generate_v4(),
       (SELECT
         digest(
           ARRAY_AGG(
@@ -100,6 +86,7 @@ DAYS.times do |day|
               legal_entity_id,
               inserted_at,
               declaration_request_id,
+              signed_data,
               seed
             )
           )::text,
@@ -114,3 +101,34 @@ DAYS.times do |day|
 end
 
 # Verify
+
+sql = "
+  SELECT hash AS expected_hash,
+         digest(
+           array_agg(
+             concat(
+               d.id,
+               d.employee_id,
+               d.start_date,
+               d.end_date,
+               d.signed_at,
+               d.created_by,
+               d.is_active,
+               d.scope,
+               d.division_id,
+               d.legal_entity_id,
+               d.inserted_at,
+               d.declaration_request_id,
+               d.signed_data,
+               d.seed
+             )
+           )::text,
+           'sha512'
+         ) AS actual_hash,
+         count(1)
+    FROM seeds s
+    JOIN declarations d ON d.seed = s.hash
+GROUP BY hash;
+"
+
+conn.exec(sql)
