@@ -87,30 +87,29 @@ end
 # Verify
 
 sql = "
-  SELECT
-    FROM seeds s
-    JOIN declarations d ON d.seed = s.hash
-GROUP BY hash
+   SELECT seeds.day,
+          seeds.existing_hash,
+          declarations.calculated_hash
+     FROM (
+            SELECT DISTINCT DATE(inserted_at) as day
+              FROM seeds
+          ) AS days
+     JOIN (
+              SELECT DATE(inserted_at) AS day,
+                     digest(array_to_string(array_agg(
+                       concat(
+                         id,
+                         employee_id
+                       ) ORDER BY inserted_at ASC
+                     ), ''), 'sha512') AS calculated_hash
+                FROM declarations
+            GROUP BY DATE(inserted_at)
+          ) AS declarations ON declarations.day = days.day
+     JOIN (
+            SELECT DATE(inserted_at) AS day,
+                   hash AS existing_hash
+              FROM seeds
+          ) AS seeds ON seeds.day = days.day
 "
 
 conn.exec(sql)
-
-SELECT
-  DATE(inserted_at),
-
-  ARRAY_TO_STRING(ARRAY_AGG(
-    CONCAT(
-      id,
-      employee_id
-    ) ORDER BY inserted_at ASC
-  ), '') AS value,
-
-  DATE(inserted_at),
-  digest(ARRAY_TO_STRING(ARRAY_AGG(
-    CONCAT(
-      id,
-      employee_id
-    ) ORDER BY inserted_at ASC
-  ), ''), 'sha512') AS digest_value
-
-FROM declarations WHERE DATE(inserted_at) = '2014-01-07' GROUP BY DATE(inserted_at)
