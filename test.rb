@@ -7,13 +7,13 @@ template = JSON.parse(template_file)
 conn = PG.connect(dbname: 'ops_dev')
 
 DAYS = 14
-PER_DAY = 100..150
+PER_DAY = 5..10
 
 conn.exec("
   DELETE FROM seeds;
   DELETE FROM declarations;
 
-  INSERT INTO seeds (hash, inserted_at) VALUES (digest('Слава Україні!', 'sha512'), '2014-01-01 23:59:59');
+  INSERT INTO seeds (hash, debug, inserted_at) VALUES (digest('Слава Україні!', 'sha512'), 'Слава Україні!', '2014-01-01 23:59:59');
 ")
 
 DAYS.times do |day|
@@ -69,29 +69,25 @@ DAYS.times do |day|
 
   # TODO: include new column here
   conn.exec("
-    INSERT INTO seeds VALUES (
+    INSERT INTO seeds (hash, debug, inserted_at) VALUES (
       (SELECT
         digest(
-          ARRAY_AGG(
+          ARRAY_TO_STRING(ARRAY_AGG(
             CONCAT(
               id,
-              employee_id,
-              start_date,
-              end_date,
-              signed_at,
-              created_by,
-              is_active,
-              scope,
-              division_id,
-              legal_entity_id,
-              inserted_at,
-              declaration_request_id,
-              signed_data,
-              seed
+              employee_id
             ) ORDER BY inserted_at ASC
-          )::text,
+          ), ''),
           'sha512'
         ) FROM declarations WHERE DATE(inserted_at) = '#{today}'
+      ),
+      (SELECT
+        ARRAY_TO_STRING(ARRAY_AGG(
+          CONCAT(
+            id,
+            employee_id
+          ) ORDER BY inserted_at ASC
+        ), '') FROM declarations WHERE DATE(inserted_at) = '#{today}'
       ),
       '#{today} 23:59:59'
     )
@@ -105,24 +101,11 @@ end
 sql = "
   SELECT hash AS expected_hash,
          digest(
-           array_agg(
+           ARRAY_TO_STRING(ARRAY_AGG(
              concat(
-               d.id,
-               d.employee_id,
-               d.start_date,
-               d.end_date,
-               d.signed_at,
-               d.created_by,
-               d.is_active,
-               d.scope,
-               d.division_id,
-               d.legal_entity_id,
-               d.inserted_at,
-               d.declaration_request_id,
-               d.signed_data,
-               d.seed
+               d.id
              ) ORDER BY d.inserted_at ASC
-           )::text,
+           ), ''),
            'sha512'
          ) AS actual_hash,
          count(1)
