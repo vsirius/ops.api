@@ -7,7 +7,7 @@ defmodule OPS.Repo.Migrations.AddNewTables do
     end
 
     create table(:seeds, primary_key: false) do
-      add :hash, :string, null: false
+      add :hash, :bytea, null: false
       add :debug, :text, null: false
       add :inserted_at, :utc_datetime, null: false
     end
