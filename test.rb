@@ -6,8 +6,8 @@ template = JSON.parse(template_file)
 
 conn = PG.connect(dbname: 'ops_dev')
 
-DAYS = 14
-PER_DAY = 5..10
+DAYS = 30
+PER_DAY = 1000..1500
 
 puts "Preparing the DB..."
 
@@ -139,4 +139,14 @@ sql = "
           ) AS seeds ON seeds.day = days.day
 "
 
-puts conn.exec(sql).map { |r| "Day #{r["day"]} is valid: #{r["day_is_valid"] == 't' ? 'true' : 'false'}" }.join("\n")
+result = conn.exec(sql)
+
+puts result.map { |r| "Day #{r["day"]} is valid: #{r["day_is_valid"] == 't' ? 'true' : 'false'}" }.join("\n")
+
+failed_days = result.select { |item| item["day_is_valid"] != 't' }
+
+if failed_days.size > 0
+  puts "The following days failed verification: #{failed_days.map { |day| day['day'] }}"
+else
+  puts "All good!"
+end
