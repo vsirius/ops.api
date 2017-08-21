@@ -7,7 +7,7 @@ template = JSON.parse(template_file)
 conn = PG.connect(dbname: 'ops_dev')
 
 DAYS = 14
-PER_DAY = 100..200
+PER_DAY = 100..150
 
 conn.exec("
   DELETE FROM seeds;
@@ -88,7 +88,7 @@ DAYS.times do |day|
               declaration_request_id,
               signed_data,
               seed
-            )
+            ) ORDER BY inserted_at ASC
           )::text,
           'sha512'
         ) FROM declarations WHERE DATE(inserted_at) = '#{today}'
@@ -121,14 +121,14 @@ sql = "
                d.declaration_request_id,
                d.signed_data,
                d.seed
-             )
+             ) ORDER BY d.inserted_at ASC
            )::text,
            'sha512'
          ) AS actual_hash,
          count(1)
     FROM seeds s
     JOIN declarations d ON d.seed = s.hash
-GROUP BY hash;
+GROUP BY hash
 "
 
 conn.exec(sql)
