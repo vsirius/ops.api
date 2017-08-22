@@ -90,7 +90,7 @@ DAYS.times do |day|
             declaration_request_id,
             signed_data,
             seed
-          ) ORDER BY inserted_at ASC
+          ) ORDER BY id ASC
         ), '') AS value FROM declarations WHERE DATE(inserted_at) = '#{today}'
     )
     INSERT INTO seeds (hash, debug, inserted_at)
@@ -127,7 +127,7 @@ sql = "
                          declaration_request_id,
                          signed_data,
                          seed
-                       ) ORDER BY inserted_at ASC
+                       ) ORDER BY id ASC
                      ), ''), 'sha512')::bytea AS calculated_hash
                 FROM declarations
             GROUP BY DATE(inserted_at)
