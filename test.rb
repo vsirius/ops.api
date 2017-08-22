@@ -6,8 +6,8 @@ template = JSON.parse(template_file)
 
 conn = PG.connect(dbname: 'ops_dev')
 
-DAYS = 30
-PER_DAY = 150..200
+DAYS = 7
+PER_DAY = 1200..1200
 
 puts "Preparing the DB..."
 
