@@ -9,47 +9,25 @@
      FROM (
             SELECT DISTINCT DATE(inserted_at) as day
               FROM seeds
-             WHERE DATE(inserted_at) = '2015-02-09'
+             WHERE DATE(inserted_at) = '2014-01-03'
           ) AS days
      JOIN (
               SELECT DATE(inserted_at) AS day,
                      digest(array_to_string(array_agg(
-                       concat(
+                       concat_ws(
+                         ',',
                          id,
-                         employee_id,
-                         start_date,
-                         end_date,
-                         signed_at,
-                         created_by,
-                         is_active,
-                         scope,
-                         division_id,
-                         legal_entity_id,
-                         inserted_at,
-                         declaration_request_id,
-                         signed_data,
-                         seed
-                       ) ORDER BY inserted_at ASC
-                     ), ''), 'sha512')::bytea AS calculated_hash,
+                         inserted_at
+                       ) ORDER BY id ASC
+                     ), 'zzz'), 'sha512')::bytea AS calculated_hash,
 
                      array_to_string(array_agg(
-                       concat(
+                       concat_ws(
+                         ',',
                          id,
-                         employee_id,
-                         start_date,
-                         end_date,
-                         signed_at,
-                         created_by,
-                         is_active,
-                         scope,
-                         division_id,
-                         legal_entity_id,
-                         inserted_at,
-                         declaration_request_id,
-                         signed_data,
-                         seed
-                       ) ORDER BY inserted_at ASC
-                     ), '') AS debug_calculated_hash
+                         inserted_at
+                       ) ORDER BY id ASC
+                     ), 'zzz') AS debug_calculated_hash
                 FROM declarations
             GROUP BY DATE(inserted_at)
           ) AS declarations ON declarations.day = days.day

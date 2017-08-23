@@ -12,7 +12,7 @@ PER_DAY = 100..200
 puts "Preparing the DB..."
 
 conn.exec("
-          CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  CREATE EXTENSION IF NOT EXISTS pgcrypto;
   DELETE FROM seeds;
   DELETE FROM declarations;
 
@@ -100,6 +100,19 @@ DAYS.times do |day|
 
   puts "Day #{today}: generated #{samples} declarations."
 end
+
+puts "Testing intrusion..."
+
+conn.exec("
+  WITH cte AS (
+    SELECT id
+    FROM declarations
+    ORDER BY random()
+    LIMIT 1
+    FOR UPDATE
+  )
+  UPDATE declarations SET start_date = '2014-01-10' FROM cte WHERE cte.id = declarations.id;
+")
 
 puts "Verifying..."
 
