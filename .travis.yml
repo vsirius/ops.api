@@ -27,6 +27,7 @@ branches:
 before_install:
   # Expose MQ and DB to Docker container
   - sudo ./bin/ci/init-db.sh
+    openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out priv/eh-test-44e7d0ea33e2.json -d
 script:
   # Increment version in mix.exs
   - ./bin/ci/version-increment.sh
@@ -36,7 +37,7 @@ script:
   - mix test --exclude pending --trace
   # Submit code coverage report to Coveralls
   # Add --pro if you using private repo.
-  - mix coveralls.travis --exclude pending
+  #  - mix coveralls.travis --exclude pending
   # Run static code analysis
   - mix credo --strict
   # Check code style
@@ -62,3 +63,4 @@ after_failure:
 after_success:
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
   - ./bin/ci/push.sh
+  - ./bin/deploy.sh
