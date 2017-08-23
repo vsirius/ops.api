@@ -6,12 +6,13 @@ template = JSON.parse(template_file)
 
 conn = PG.connect(dbname: 'ops_dev')
 
-DAYS = 7
-PER_DAY = 1200..1200
+DAYS = 14
+PER_DAY = 100..200
 
 puts "Preparing the DB..."
 
 conn.exec("
+          CREATE EXTENSION IF NOT EXISTS pgcrypto;
   DELETE FROM seeds;
   DELETE FROM declarations;
 
@@ -104,6 +105,7 @@ puts "Verifying..."
 
 sql = "
    SELECT seeds.day,
+          declarations.count as count,
           seeds.existing_hash = declarations.calculated_hash AS day_is_valid
      FROM (
             SELECT DISTINCT DATE(inserted_at) as day
@@ -128,7 +130,8 @@ sql = "
                          signed_data,
                          seed
                        ) ORDER BY id ASC
-                     ), ''), 'sha512')::bytea AS calculated_hash
+                     ), ''), 'sha512')::bytea AS calculated_hash,
+                     count(1) as count
                 FROM declarations
             GROUP BY DATE(inserted_at)
           ) AS declarations ON declarations.day = days.day
@@ -141,7 +144,7 @@ sql = "
 
 result = conn.exec(sql)
 
-puts result.map { |r| "Day #{r["day"]} is valid: #{r["day_is_valid"] == 't' ? 'true' : 'false'}" }.join("\n")
+puts result.map { |r| "On day #{r["day"]} there was #{r["count"]} declarations. Day is valid?: #{r["day_is_valid"] == 't' ? 'true' : 'false'}" }.join("\n")
 
 failed_days = result.select { |item| item["day_is_valid"] != 't' }
 

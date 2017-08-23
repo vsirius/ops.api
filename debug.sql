@@ -1,5 +1,7 @@
    SELECT seeds.existing_hash,
           declarations.calculated_hash,
+          seeds.debug_seed,
+          declarations.debug_calculated_hash,
           digest(seeds.debug_seed, 'sha512') as re_hash,
           digest(declarations.debug_calculated_hash, 'sha512') as re_calculated_hash,
           length(seeds.debug_seed),
