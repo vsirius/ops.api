@@ -27,7 +27,7 @@ branches:
 before_install:
   # Expose MQ and DB to Docker container
   - sudo ./bin/ci/init-db.sh
-    openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out priv/eh-test-44e7d0ea33e2.json -d
+  - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out priv/eh-test-44e7d0ea33e2.json -d
 script:
   # Increment version in mix.exs
   - ./bin/ci/version-increment.sh
