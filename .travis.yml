@@ -13,7 +13,7 @@ otp_release:
   - 19.2
 env:
   global:
-    - GOOGLE_APPLICATION_CREDENTIALS="${PWD}/priv/eh-test-44e7d0ea33e2.json"
+    - GOOGLE_APPLICATION_CREDENTIALS="${PWD}/eh-test-44e7d0ea33e2.json"
     - MIX_ENV=test
     - DOCKER_HUB_ACCOUNT=siriusgti
     - MAIN_BRANCHES="master develop staging" # Branches on which you want version to be incremented
@@ -27,11 +27,11 @@ branches:
     - /[0-9]*\.[0-9]*\.[0-9]*/
 before_install:
   # Expose MQ and DB to Docker container
-  openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out priv/eh-test-44e7d0ea33e2.json -d
-  - sudo ./bin/ci/init-db.sh
+  - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
 script:
   # Increment version in mix.exs
   - ./bin/ci/version-increment.sh
+  - sudo ./bin/ci/init-db.sh
   # Install dependencies
  # - mix deps.get
   # Run all tests except pending ones
