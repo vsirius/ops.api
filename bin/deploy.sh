@@ -20,7 +20,6 @@ PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs"
 PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
-cd $PROJECT_NAME
-pwd
-sed -i '' "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/" values.yaml
+ls $PROJECT_NAME
+sed -i '' "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/" ops/values.yaml
 cat $PROJECT_NAME/values.yaml
