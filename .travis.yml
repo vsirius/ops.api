@@ -31,38 +31,38 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
 script:
   # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh
-  - sudo ./bin/ci/init-db.sh
+#  - ./bin/ci/version-increment.sh
+#  - sudo ./bin/ci/init-db.sh
   # Install dependencies
-  - mix deps.get
+#  - mix deps.get
   # Run all tests except pending ones
-  - mix test --exclude pending --trace
+#  - mix test --exclude pending --trace
   # Submit code coverage report to Coveralls
   # Add --pro if you using private repo.
   #  - mix coveralls.travis --exclude pending
   # Run static code analysis
-  - mix credo --strict
+#  - mix credo --strict
   # Check code style
-  - mix dogma
+#  - mix dogma
   # Build Docker container
-  - ./bin/build.sh
+#  - ./bin/build.sh
   # Initialize DB for Docker container
-  - MIX_ENV=dev mix ecto.setup
+#  - MIX_ENV=dev mix ecto.setup
   # Run Docker container
-  - sudo ./bin/start.sh
-  - sleep 5
-  - docker ps
-  - RUNNING_CONTAINERS=`docker ps | wc -l`;
-    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
-      echo "[E] Container is not started\!";
-      docker logs ops --details --since 5h;
-      exit 1;
-    fi;
+#  - sudo ./bin/start.sh
+#  - sleep 5
+#  - docker ps
+#  - RUNNING_CONTAINERS=`docker ps | wc -l`;
+#    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
+#      echo "[E] Container is not started\!";
+#      docker logs ops --details --since 5h;
+#      exit 1;
+#    fi;
    #Run acceptance tests on Docker container
-  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-  - docker logs ops --details --since 5h
+#  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
+#  - docker logs ops --details --since 5h
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-  - ./bin/ci/push.sh
+#  - ./bin/ci/push.sh
   - sudo ./bin/deploy.sh
   - sudo ./bin/wait-for-deployment api ops
 after_success:
