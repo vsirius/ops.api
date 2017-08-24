@@ -18,7 +18,7 @@ cd ehealth.charts
 #get version and project name
 PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
 #PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-PROJECT_VERSION="0.1.27"
+PROJECT_VERSION="0.1.28"
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
 ls $PROJECT_NAME

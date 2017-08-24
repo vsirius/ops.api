@@ -1,34 +1,79 @@
 language: elixir
 cache:
   directories:
-  - deps
+    - deps
 services:
-- docker
-- postgresql
+  - docker
+  - postgresql
 addons:
-  postgresql: '9.5'
+  postgresql: "9.5"
 elixir:
-- 1.4.2
+  - 1.4.2
 otp_release:
-- 19.2
+  - 19.2
+notifications:
+    slack: edenlabllc:TgrXtO7J72av6LJkXdw8K9U6
 env:
   global:
-  - GOOGLE_APPLICATION_CREDENTIALS="$TRAVIS_BUILD_DIR/eh-test-44e7d0ea33e2.json"
-  - MIX_ENV=test
-  - DOCKER_HUB_ACCOUNT=siriusgti
-  - MAIN_BRANCHES="master develop staging"
-  - RELEASE_BRANCH="master"
-  - secure: lnRXD7WSYT0oCw8Lz5GTdk3H7O4o8a9weFETJFlhsxugiHlxqyGC9wHzUCcWvUdo+XOzZ817GJPrd1+w9g5PhQgCdFzJIQ+TqJjTn01GK3GfKyMXB2D/Wm1JrKAxgW/+Y2BJ2/b6AtajXIA9SmkLLHM8M9tG2KuwSmNZKqd+DY6ZvfGkOrlyBQZYlGVz74qQU7x8yGu2Ftam2X27boH5Q+58/NboE//o/fa56jqkiNO9ktgC1fh5LZ947+hdmT6aX7wlnQTTPrXw+vWOdL5rr+EnVzAdx01yuawcYPC+a2vmkAW5KHfpKitMp0N00wPOrq1n5UoUepya1c/z4QCku1hE7zQvTzw38dZJbWoeTPkdV0qnIGv9B341ab80hUxt+E8YeCVnCy/nr2GePVJmdyppfEyL3mo+EO8M6ipqcWOll4/mZIYWkQIIb8jCzIKZlD1rYf0vs57uCW9S0oQYhF07K6fYpdaZ9vUHXj2oRj6ZS03UzpucqLtO0Aas10qbxm1mXodyvTKEXwcIFpcR8Ol5bI0BipyptJG5s8F4Tv7NqHCmL/yjACdlqubAUHw4pU3eiB8m848Jak9AemsQjua29TP46AZPKIi7qSuh4c49V7vpJFin18D6wShu2aWcRwHF3nU+TBNxh5fVIFrJ3Kfab8kXASHaVlMg9XZkYlU=
-  - secure: Y8ekbRa3JlRHjP2qqxL3xm+/tuXoHRNvHoc0JNuB92MWhT3t4ClQMhMHauzP1UzbjuaiHzLm3uX3cKbOjhTz9WzYy94y8LK/We8D2Y1JPQRTG7Yezb3A0qsYKgsmTVXp8xTHQg/qGgCmwnEI1CVUMZqNWuNtwQCOPWiR/wVFJpV7sqWHFnvwSmXRw2hpAncZUjzmLLIEJl+5J52wyfgILr4Reu0tqiMesmkZpNxGlOC7hT5EW49LWau/lMRXVancblhtdljUtTpfXoExHT8xFRg/TW8lyragEWN4y/VLYbJJ0JsiEhBMUBWfUY9UL/LtjIt6sO0wG11J37u+fd/04+8W9Q1kKuA/ZfHxcGuf/uQ2XIR/qLMKYcdBwYSeCNdC8f//IrXZQ9Pa2P1+bOgb8shVp9XRWb88l/1vU6lpkxJNv+Jbk0gqiCfwfh8ZZgqyyDFe7+5ibk4MBi4RQVPdAaIJuOnww227OIfPIHL0MGCEvl9G0Hk05QcLR0TmLx+bC5F86CWXsbUxuwj6RGoqPkjWj7A2y0yhR3doEcC1U8FX4xPqFkLXpJpgQB9iWuom2Yx9dSXLUE8HZ65Ga4xFIli+0JsG5PHvGOi84Cl6AIsOaA6MECln1Bqf8KcLad1m5LGpKgEqsN9OzDNiYKt7IaQH9KV3i76Gls+rixzEETM=
+    - MIX_ENV=test
+    - DOCKER_HUB_ACCOUNT=siriusgti
+    - MAIN_BRANCHES="master develop staging" # Branches on which you want version to be incremented
+    - RELEASE_BRANCH="master"
+    # Docker and GitHub credentials
+    - secure: "lnRXD7WSYT0oCw8Lz5GTdk3H7O4o8a9weFETJFlhsxugiHlxqyGC9wHzUCcWvUdo+XOzZ817GJPrd1+w9g5PhQgCdFzJIQ+TqJjTn01GK3GfKyMXB2D/Wm1JrKAxgW/+Y2BJ2/b6AtajXIA9SmkLLHM8M9tG2KuwSmNZKqd+DY6ZvfGkOrlyBQZYlGVz74qQU7x8yGu2Ftam2X27boH5Q+58/NboE//o/fa56jqkiNO9ktgC1fh5LZ947+hdmT6aX7wlnQTTPrXw+vWOdL5rr+EnVzAdx01yuawcYPC+a2vmkAW5KHfpKitMp0N00wPOrq1n5UoUepya1c/z4QCku1hE7zQvTzw38dZJbWoeTPkdV0qnIGv9B341ab80hUxt+E8YeCVnCy/nr2GePVJmdyppfEyL3mo+EO8M6ipqcWOll4/mZIYWkQIIb8jCzIKZlD1rYf0vs57uCW9S0oQYhF07K6fYpdaZ9vUHXj2oRj6ZS03UzpucqLtO0Aas10qbxm1mXodyvTKEXwcIFpcR8Ol5bI0BipyptJG5s8F4Tv7NqHCmL/yjACdlqubAUHw4pU3eiB8m848Jak9AemsQjua29TP46AZPKIi7qSuh4c49V7vpJFin18D6wShu2aWcRwHF3nU+TBNxh5fVIFrJ3Kfab8kXASHaVlMg9XZkYlU="
+    - secure: "Y8ekbRa3JlRHjP2qqxL3xm+/tuXoHRNvHoc0JNuB92MWhT3t4ClQMhMHauzP1UzbjuaiHzLm3uX3cKbOjhTz9WzYy94y8LK/We8D2Y1JPQRTG7Yezb3A0qsYKgsmTVXp8xTHQg/qGgCmwnEI1CVUMZqNWuNtwQCOPWiR/wVFJpV7sqWHFnvwSmXRw2hpAncZUjzmLLIEJl+5J52wyfgILr4Reu0tqiMesmkZpNxGlOC7hT5EW49LWau/lMRXVancblhtdljUtTpfXoExHT8xFRg/TW8lyragEWN4y/VLYbJJ0JsiEhBMUBWfUY9UL/LtjIt6sO0wG11J37u+fd/04+8W9Q1kKuA/ZfHxcGuf/uQ2XIR/qLMKYcdBwYSeCNdC8f//IrXZQ9Pa2P1+bOgb8shVp9XRWb88l/1vU6lpkxJNv+Jbk0gqiCfwfh8ZZgqyyDFe7+5ibk4MBi4RQVPdAaIJuOnww227OIfPIHL0MGCEvl9G0Hk05QcLR0TmLx+bC5F86CWXsbUxuwj6RGoqPkjWj7A2y0yhR3doEcC1U8FX4xPqFkLXpJpgQB9iWuom2Yx9dSXLUE8HZ65Ga4xFIli+0JsG5PHvGOi84Cl6AIsOaA6MECln1Bqf8KcLad1m5LGpKgEqsN9OzDNiYKt7IaQH9KV3i76Gls+rixzEETM="
 branches:
+  # Releases are generated automatically, stop infinite build loop
   except:
-  - "/[0-9]*\\.[0-9]*\\.[0-9]*/"
+    - /[0-9]*\.[0-9]*\.[0-9]*/
 before_install:
-- openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv
-  -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
+  # Expose MQ and DB to Docker container
+  - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
 script:
-- sudo ./bin/deploy.sh
-- sudo ./bin/wait-for-deployment api ops
+  # Increment version in mix.exs
+  - ./bin/ci/version-increment.sh
+  - sudo ./bin/ci/init-db.sh
+  # Install dependencies
+  - mix deps.get
+  # Run all tests except pending ones
+  - mix test --exclude pending --trace
+  # Submit code coverage report to Coveralls
+  # Add --pro if you using private repo.
+  #  - mix coveralls.travis --exclude pending
+  # Run static code analysis
+  - mix credo --strict
+  # Check code style
+  - mix dogma
+  # Build Docker container
+  - ./bin/build.sh
+  # Initialize DB for Docker container
+  - MIX_ENV=dev mix ecto.setup
+  # Run Docker container
+  - sudo ./bin/start.sh
+  - sleep 5
+  - docker ps
+  - RUNNING_CONTAINERS=`docker ps | wc -l`;
+    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
+      echo "[E] Container is not started\!";
+      docker logs ops --details --since 5h;
+      exit 1;
+    fi;
+   #Run acceptance tests on Docker container
+  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
+after_failure:
+  - docker logs ops --details --since 5h
+after_success:
+  # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
+  - ./bin/ci/push.sh
+  - sudo ./bin/deploy.sh
+  - sudo ./bin/wait-for-deployment api ops
+after_success:
+  - echo "ok"
+after_failure:
+  - sudo kubectl get pod
 notifications:
   slack:
     secure: AOxx6JhybecYGy5L3POlLO38+0S2iTlG9nQJcTiu+35N34+ZpvEQreIy5GrImLZ3pETEXZGnMzQ6TwGEQJodTX1o29pbR6Jk2IC2AjTB2RAGs7DqLMXF6AUd5ATGzitiJvIgoWYoiFSvt0dhaBS3geP7PpmY4dqCkBvsPjxR5WyPk1q4bN5XM65Lx60OO5xB4oYSoHVhKH7UriC3ZgPKAkyXn1bIJJAFCIuhaRExBnVnaCCljLQ/ov6e5ZcfLdFN7kZYPoOW4CV5qKUHuGMJkS+D8agwekAwkCLXPWvuXsjpro0gc8L0FF6q697VP96G4TA10KGF7KiWGs3JWoRa1wKklmfmDPZfl3HXzz/9WmTrv5ZtFJOrAi5ISe6cMuVzxrxromXvcE5Vmpg0S+26TNFeTHtOZ9m/Ezk08MSrAU9pD3dY1fvlM1Gscn7sihs3ZPimf54XvtWo/ZBkSjv6xfXs56gqViNBEhqb7PlqvMaiAh0xr5cevdOx7fLIJnscSdif2i6RosTf4BwUYhsrb7Ia387Z4MH3jH6fFvKP3jM+XGoIXJc1nAdoWH1gzdjUt7tlkKQV+xlr40ZT0816gfVPArzoyvQ2rgkefZklsHcu0dO8vkBtBVFRM/xAQVzoF62PzhVjmc8iS3h+oJ+cLjjhE91Ntjx3z17lm4ey2Y4=
+
+  
+
