@@ -23,6 +23,7 @@ pwd
 ls $PROJECT_NAME
 #sed -i '' "1,10s/tag:.*/tag: \"33\"/" "ops/values.yaml"
 sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "ops/values.yaml"
+sed -i'' -e "1,10s/repository:.*/repository: \"siriusgti/ops\"/g" "ops/values.yaml"
 cat ops/values.yaml
 helm upgrade  -f ops/values.yaml  ops ops
 
