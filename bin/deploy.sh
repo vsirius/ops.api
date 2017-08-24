@@ -5,7 +5,7 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 ## Install helm
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.0-linux-amd64.tar.gz
-tar -zxvf helm-v2.0.0-linux-amd64.tgz
+tar -zxvf helm-v2.6.0-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 # Credentials to GCE
 gcloud auth  activate-service-account  --key-file=$TRAVIS_BUILD_DIR/eh-test-44e7d0ea33e2.json
