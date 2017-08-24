@@ -21,5 +21,5 @@ PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/m
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
 ls $PROJECT_NAME
-sed -i '' "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/" "$TRAVIS_BUILD_DIR/ehealth.charts/ops/values.yaml"
-cat $PROJECT_NAME/values.yaml
+sed -i '' "1,10s/tag:.*/tag: \"33\"/" "ops/values.yaml"
+cat ops/values.yaml
