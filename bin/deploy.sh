@@ -15,10 +15,11 @@ helm ls
 #get helm charts
 git clone https://$GITHUB_TOKEN@github.com/edenlabllc/ehealth.charts.git
 cd ehealth.charts
+git checkout charts_for_tests
 #get version and project name
 PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-#PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-PROJECT_VERSION="0.1.26"
+PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
+#PROJECT_VERSION="0.1.26"
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
 ls $PROJECT_NAME
