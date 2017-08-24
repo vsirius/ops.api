@@ -14,15 +14,14 @@ kubectl get pod --all-namespaces=true
 helm ls
 #get helm charts
 git clone https://$GITHUB_TOKEN@github.com/edenlabllc/ehealth.charts.git
-#cd ehealth.charts
+cd ehealth.charts
 #get version and project name
-#PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-#PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-#echo "$PROJECT_NAME  $PROJECT_VERSION"
-#pwd
-#ls $PROJECT_NAME
+PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
+PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
+echo "$PROJECT_NAME  $PROJECT_VERSION"
+pwd
+ls $PROJECT_NAME
 #sed -i '' "1,10s/tag:.*/tag: \"33\"/" "ops/values.yaml"
-#cat ops/values.yaml
+sed -i'' -e "1,10s/tag:.*/tag: \"33\"/g" "ops/values.yaml"
+cat ops/values.yaml
 
-sed -i '' "1,10s/tag:.*/tag: \"22\"/" "ehealth.charts/ops/values.yaml"
-cat ehealth.charts/ops/values.yaml
