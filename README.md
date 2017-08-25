@@ -11,7 +11,7 @@ Operation database which stores Declarations for Ukrainian Health Services gover
 
 ## Installation
 
-You can use official Docker container to deploy this service, it can be found on [nebo15/ops](https://hub.docker.com/r/nebo15/ops/) Docker Hub.
+You can use official Docker container to deploy this service, it can be found on [nebo15/ops](https://hub.docker.com/r/nebo15/ops/) Docker Hub. 
 
 ### Dependencies
 
