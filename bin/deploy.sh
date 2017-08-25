@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 ## install kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -22,7 +24,7 @@ PROJECT_VERSION="0.1.261"
 sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart 
 cd $TRAVIS_BUILD_DIR/bin
-./wait-for-deployment.sh api $Chart 180
+./wait-for-deployment.sh api $Chart 18
    if [ "$?" -eq 0 ]; then
      kubectl get pod -n$Chart | grep api 
      cd $TRAVIS_BUILD_DIR/ehealth.charts && git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
