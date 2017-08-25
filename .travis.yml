@@ -65,7 +65,7 @@ after_failure:
   - docker logs ops --details --since 5h
 after_success:
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-  - ./bin/ci/push.sh
+  #- ./bin/ci/push.sh
   - sudo ./bin/deploy.sh
 notifications:
   slack:

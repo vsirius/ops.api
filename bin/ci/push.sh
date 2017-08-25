@@ -22,8 +22,6 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
     ./bin/ci/release.sh -a $DOCKER_HUB_ACCOUNT -t $TRAVIS_BRANCH -l;
-    ./bin/deploy.sh;
-    ./bin/wait-for-deployment api $Chart;
   fi;
 
   if [[ "$MAIN_BRANCHES" =~ "$TRAVIS_BRANCH" ]]; then
