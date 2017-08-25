@@ -62,9 +62,9 @@ script:
 #  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
 #  - docker logs ops --details --since 5h
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-#  - ./bin/ci/push.sh
-  - sudo ./bin/deploy.sh
-  - sudo ./bin/wait-for-deployment api ops
+  - sudo ./bin/ci/push.sh
+#  - sudo ./bin/deploy.sh
+ # - sudo ./bin/wait-for-deployment api ops
 after_success:
   - sudo kubectl get pod -nops | grep api
   - cd ehealth.charts && sudo git checkout charts_for_tests && sudo  git add . && sudo  git commit -m "Bump ops version" && sudo git pull && sudo git push
