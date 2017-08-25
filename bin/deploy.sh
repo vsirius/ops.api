@@ -29,3 +29,4 @@ sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
 cat $Chart/values.yaml
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart
+fi;
