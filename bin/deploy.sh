@@ -18,15 +18,15 @@ cd ehealth.charts
 git checkout charts_for_tests
 #get version and project name
 PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-#PROJECT_VERSION="0.1.26"
+#PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
+PROJECT_VERSION="0.1.261"
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
 ls $PROJECT_NAME
 #sed -i '' "1,10s/tag:.*/tag: \"33\"/" "ops/values.yaml"
-sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "ops/values.yaml"
+sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
-cat ops/values.yaml
-helm upgrade  -f ops/values.yaml  ops ops
+cat $Chart/values.yaml
+helm upgrade  -f $Chart/values.yaml  $Chart $Chart
 
 
