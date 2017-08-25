@@ -1,4 +1,5 @@
-#!/bin/ba
+#!/bin/bash
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 ## install kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 chmod +x ./kubectl
@@ -27,5 +28,3 @@ ls $PROJECT_NAME
 sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
 cat $Chart/values.yaml
-helm upgrade  -f $Chart/values.yaml  $Chart $Chart
-./$TRAVIS_BUILD_DIR/bin/wait-for-deployment.sh api $Chart

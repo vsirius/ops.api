@@ -32,13 +32,48 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
 script:
   # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh
-after_failure:
- # - docker logs ops --details --since 5h
-after_success:
+#  - ./bin/ci/version-increment.sh
+#  - sudo ./bin/ci/init-db.sh
+  # Install dependencies
+#  - mix deps.get
+  # Run all tests except pending ones
+#  - mix test --exclude pending --trace
+  # Submit code coverage report to Coveralls
+  # Add --pro if you using private repo.
+  #  - mix coveralls.travis --exclude pending
+  # Run static code analysis
+#  - mix credo --strict
+  # Check code style
+#  - mix dogma
+  # Build Docker container
+#  - ./bin/build.sh
+  # Initialize DB for Docker container
+#  - MIX_ENV=dev mix ecto.setup
+  # Run Docker container
+#  - sudo ./bin/start.sh
+#  - sleep 5
+#  - docker ps
+#  - RUNNING_CONTAINERS=`docker ps | wc -l`;
+#    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
+#      echo "[E] Container is not started\!";
+#      docker logs ops --details --since 5h;
+#      exit 1;
+#    fi;
+   #Run acceptance tests on Docker container
+#  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
+#  - docker logs ops --details --since 5h
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-  #- ./bin/ci/push.sh
-  - sudo ./bin/deploy.sh
+  #- sudo ./bin/ci/push.sh
+   - sudo ./bin/deploy.sh
+   - sudo ./bin/wait-for-deployment api $Chart 
+after_success:
+  - sudo kubectl get pod -n$Chart | grep api
+  - cd ehealth.charts && sudo git checkout charts_for_tests && sudo  git add . && sudo  git commit -m "Bump $Chart version" && sudo git pull && sudo git push
+after_failure:
+  #get logs
+  - sudo kubectl logs $(sudo kubectl get pod -n$Chart | awk '{ print $1 }' | grep api) -n$Chart
+  #rollback to provision release
+  - helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1))
 notifications:
   slack:
     secure: AOxx6JhybecYGy5L3POlLO38+0S2iTlG9nQJcTiu+35N34+ZpvEQreIy5GrImLZ3pETEXZGnMzQ6TwGEQJodTX1o29pbR6Jk2IC2AjTB2RAGs7DqLMXF6AUd5ATGzitiJvIgoWYoiFSvt0dhaBS3geP7PpmY4dqCkBvsPjxR5WyPk1q4bN5XM65Lx60OO5xB4oYSoHVhKH7UriC3ZgPKAkyXn1bIJJAFCIuhaRExBnVnaCCljLQ/ov6e5ZcfLdFN7kZYPoOW4CV5qKUHuGMJkS+D8agwekAwkCLXPWvuXsjpro0gc8L0FF6q697VP96G4TA10KGF7KiWGs3JWoRa1wKklmfmDPZfl3HXzz/9WmTrv5ZtFJOrAi5ISe6cMuVzxrxromXvcE5Vmpg0S+26TNFeTHtOZ9m/Ezk08MSrAU9pD3dY1fvlM1Gscn7sihs3ZPimf54XvtWo/ZBkSjv6xfXs56gqViNBEhqb7PlqvMaiAh0xr5cevdOx7fLIJnscSdif2i6RosTf4BwUYhsrb7Ia387Z4MH3jH6fFvKP3jM+XGoIXJc1nAdoWH1gzdjUt7tlkKQV+xlr40ZT0816gfVPArzoyvQ2rgkefZklsHcu0dO8vkBtBVFRM/xAQVzoF62PzhVjmc8iS3h+oJ+cLjjhE91Ntjx3z17lm4ey2Y4=
