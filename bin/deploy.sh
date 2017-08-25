@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 ## install kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -26,10 +28,10 @@ cd $TRAVIS_BUILD_DIR/bin
    if [ "$?" -eq 0 ]; then
      kubectl get pod -n$Chart | grep api 
      cd $TRAVIS_BUILD_DIR/ehealth.charts && git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
-     exit 0
+     exit 0;
    else 
    	 kubectl logs $(sudo kubectl get pod -n$Chart | awk '{ print $1 }' | grep api) -n$Chart 
    	 helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1)) 
-   	 exit 1
+   	 exit 1;
    fi;
 fi;
