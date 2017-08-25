@@ -73,7 +73,6 @@ after_failure:
   #get logs
   - sudo kubectl logs $(sudo kubectl get pod -n$Chart | awk '{ print $1 }' | grep api) -n$Chart
 deploy:
-  skip_cleanup: true
   - sudo ./bin/deploy.sh
   - sudo ./bin/wait-for-deployment.sh api $Chart 
 after_success:
