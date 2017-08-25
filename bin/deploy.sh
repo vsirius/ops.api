@@ -22,7 +22,7 @@ PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/m
 sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart 
 cd $TRAVIS_BUILD_DIR/bin
-./wait-for-deployment.sh api $Chart 
+./wait-for-deployment.sh api $Chart 180
    if [ "$?" -eq 0 ]; then
      kubectl get pod -n$Chart | grep api 
      cd $TRAVIS_BUILD_DIR/ehealth.charts && git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
