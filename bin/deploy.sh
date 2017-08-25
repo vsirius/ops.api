@@ -1,4 +1,5 @@
 #!/bin/bash
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 ## install kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 chmod +x ./kubectl
@@ -28,5 +29,9 @@ sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
 cat $Chart/values.yaml
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart
-
-
+if ./bin/wait-for-deployment api $Chart then
+    echo "Command succeeded"
+    else 
+    helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1))
+fi;
+fi;
