@@ -19,8 +19,8 @@ cd ehealth.charts
 git checkout charts_for_tests
 #get version and project name
 PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-#PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
-PROJECT_VERSION="0.1.261"
+PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "$TRAVIS_BUILD_DIR/mix.exs")
+#PROJECT_VERSION="0.1.261"
 echo "$PROJECT_NAME  $PROJECT_VERSION"
 pwd
 ls $PROJECT_NAME
@@ -30,14 +30,12 @@ sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 cat $Chart/values.yaml
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart
 cd $TRAVIS_BUILD_DIR/bin
-ls
 ./wait-for-deployment.sh api $Chart 
    if [$? -eq 0 ]; then
      kubectl get pod -n$Chart | grep api
-     git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
+     cd $TRAVIS_BUILD_DIR/ehealth.charts && git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
    else 
    	 kubectl logs $(sudo kubectl get pod -n$Chart | awk '{ print $1 }' | grep api) -n$Chart
    	 helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1))
    fi;
 fi;
-./bin/wait-for-deployment.sh
