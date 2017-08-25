@@ -29,7 +29,7 @@ sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
 cat $Chart/values.yaml
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart
- if ./bin/wait-for-deployment.sh api $Chart ; then
+ if $TRAVIS_BUILD_DIR/bin/wait-for-deployment.sh api $Chart ; then
     echo "Command succeeded"
  else 
     helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1))
