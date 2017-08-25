@@ -29,4 +29,12 @@ sed -i'' -e "1,10s/tag:.*/tag: \"$PROJECT_VERSION\"/g" "$Chart/values.yaml"
 #sed -i'' -e "1,10s/repository:.*/repository: \"$PROJECT_REP\"/g" "ops/values.yaml"
 cat $Chart/values.yaml
 helm upgrade  -f $Chart/values.yaml  $Chart $Chart
+./$TRAVIS_BUILD_DIR/bin/wait-for-deployment.sh api $Chart 
+   if [$? -eq 0 ]; then
+     kubectl get pod -n$Chart | grep api
+     git add . && sudo  git commit -m "Bump $Chart version $PROJECT_VERSION" && sudo git pull && sudo git push
+   else 
+   	 kubectl logs $(sudo kubectl get pod -n$Chart | awk '{ print $1 }' | grep api) -n$Chart
+   	 helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1))
+   fi;
 fi;
