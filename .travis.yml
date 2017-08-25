@@ -67,8 +67,12 @@ script:
   - sudo ./bin/wait-for-deployment api ops
 after_success:
   - sudo kubectl get pod -nops | grep api
+  - cd ehealth.charts && git checkout charts_for_tests && git add . && git commit -m "Bump ops version" && git pull && git push
 after_failure:
+  #get logs
   - sudo kubectl logs $(sudo kubectl get pod -nops | awk '{ print $1 }' | grep api) -nops
+  #rollback to provision release
+  - helm rollback ops  $(($(helm ls | grep ops | awk '{ print $2 }') -1))
 notifications:
   slack:
     secure: AOxx6JhybecYGy5L3POlLO38+0S2iTlG9nQJcTiu+35N34+ZpvEQreIy5GrImLZ3pETEXZGnMzQ6TwGEQJodTX1o29pbR6Jk2IC2AjTB2RAGs7DqLMXF6AUd5ATGzitiJvIgoWYoiFSvt0dhaBS3geP7PpmY4dqCkBvsPjxR5WyPk1q4bN5XM65Lx60OO5xB4oYSoHVhKH7UriC3ZgPKAkyXn1bIJJAFCIuhaRExBnVnaCCljLQ/ov6e5ZcfLdFN7kZYPoOW4CV5qKUHuGMJkS+D8agwekAwkCLXPWvuXsjpro0gc8L0FF6q697VP96G4TA10KGF7KiWGs3JWoRa1wKklmfmDPZfl3HXzz/9WmTrv5ZtFJOrAi5ISe6cMuVzxrxromXvcE5Vmpg0S+26TNFeTHtOZ9m/Ezk08MSrAU9pD3dY1fvlM1Gscn7sihs3ZPimf54XvtWo/ZBkSjv6xfXs56gqViNBEhqb7PlqvMaiAh0xr5cevdOx7fLIJnscSdif2i6RosTf4BwUYhsrb7Ia387Z4MH3jH6fFvKP3jM+XGoIXJc1nAdoWH1gzdjUt7tlkKQV+xlr40ZT0816gfVPArzoyvQ2rgkefZklsHcu0dO8vkBtBVFRM/xAQVzoF62PzhVjmc8iS3h+oJ+cLjjhE91Ntjx3z17lm4ey2Y4=
