@@ -67,7 +67,7 @@ script:
   - sudo ./bin/wait-for-deployment api ops
 after_success:
   - sudo kubectl get pod -nops | grep api
-  - cd ehealth.charts && git checkout charts_for_tests && git add . && git commit -m "Bump ops version" && git pull && git push
+  - cd ehealth.charts && sudo git checkout charts_for_tests && sudo  git add . && sudo  git commit -m "Bump ops version" && sudo git pull && sudo git push
 after_failure:
   #get logs
   - sudo kubectl logs $(sudo kubectl get pod -nops | awk '{ print $1 }' | grep api) -nops
