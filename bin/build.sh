@@ -15,6 +15,6 @@ PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "${PROJECT_DIR}/mix.exs")
 PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "${PROJECT_DIR}/mix.exs")
 echo "[I] Building a Docker container '${PROJECT_NAME}' (version '${PROJECT_VERSION}') from path '${PROJECT_DIR}'.."
 
-docker build --tag "${PROJECT_NAME}:${PROJECT_VERSION}" \
+docker build1 --tag "${PROJECT_NAME}:${PROJECT_VERSION}" \
              --file "${PROJECT_DIR}/Dockerfile" \
              $PROJECT_DIR
