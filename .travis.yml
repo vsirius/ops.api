@@ -63,9 +63,10 @@ script:
     fi;
   # Run acceptance tests on Docker container
   - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-after_failure:
-  - docker logs ops --details --since 5h
-after_success:
-  # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
   - sudo ./bin/ci/push.sh
+#after_failure:
+ # - docker logs ops --details --since 5h
+#after_success:
+  # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
+ # - sudo ./bin/ci/push.sh
   #- sudo ./bin/deploy.sh
