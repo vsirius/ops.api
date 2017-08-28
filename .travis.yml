@@ -62,8 +62,8 @@ script:
  #   fi;
   # Run acceptance tests on Docker container
  # - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-  - ./bin/ci/push.sh || travis_terminate 1
-  - sudo ./bin/deploy.sh
+  - ./bin/ci/push.sh 
+  - sudo ./bin/deploy.sh || travis_terminate 1
 #after_failure:
  # - docker logs ops --details --since 5h
 #after_success:
