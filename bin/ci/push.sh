@@ -25,6 +25,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
             exit 0;
           else 
             exit 1;
+      fi;
   fi;
 
   if [[ "$MAIN_BRANCHES" =~ "$TRAVIS_BRANCH" ]]; then
