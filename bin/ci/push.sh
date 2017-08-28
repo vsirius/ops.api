@@ -1,7 +1,6 @@
 #!/bin/bash
 # This setup works with Travis-CI.
 # You need to specify $DOCKER_HUB_ACCOUNT, $DOCKER_USERNAME and $DOCKER_PASSWORD before using this script.
-set -e
 echo "Logging in into Docker Hub";
 docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD;
 
