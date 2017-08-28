@@ -1,7 +1,6 @@
 #!/bin/bash
-
-#if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-#	  if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+	  if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
 ## install kubectl
 			curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 			chmod +x ./kubectl
@@ -34,5 +33,5 @@
    	 				helm rollback $Chart  $(($(helm ls | grep $Chart | awk '{ print $2 }') -1)) 
    	 				exit 1;
    				fi;
- #		fi;
-#fi;
+ 		fi;
+fi;

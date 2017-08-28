@@ -15,6 +15,9 @@ notifications:
   slack:
     secure: AOxx6JhybecYGy5L3POlLO38+0S2iTlG9nQJcTiu+35N34+ZpvEQreIy5GrImLZ3pETEXZGnMzQ6TwGEQJodTX1o29pbR6Jk2IC2AjTB2RAGs7DqLMXF6AUd5ATGzitiJvIgoWYoiFSvt0dhaBS3geP7PpmY4dqCkBvsPjxR5WyPk1q4bN5XM65Lx60OO5xB4oYSoHVhKH7UriC3ZgPKAkyXn1bIJJAFCIuhaRExBnVnaCCljLQ/ov6e5ZcfLdFN7kZYPoOW4CV5qKUHuGMJkS+D8agwekAwkCLXPWvuXsjpro0gc8L0FF6q697VP96G4TA10KGF7KiWGs3JWoRa1wKklmfmDPZfl3HXzz/9WmTrv5ZtFJOrAi5ISe6cMuVzxrxromXvcE5Vmpg0S+26TNFeTHtOZ9m/Ezk08MSrAU9pD3dY1fvlM1Gscn7sihs3ZPimf54XvtWo/ZBkSjv6xfXs56gqViNBEhqb7PlqvMaiAh0xr5cevdOx7fLIJnscSdif2i6RosTf4BwUYhsrb7Ia387Z4MH3jH6fFvKP3jM+XGoIXJc1nAdoWH1gzdjUt7tlkKQV+xlr40ZT0816gfVPArzoyvQ2rgkefZklsHcu0dO8vkBtBVFRM/xAQVzoF62PzhVjmc8iS3h+oJ+cLjjhE91Ntjx3z17lm4ey2Y4=
     on_success: always
+    template:
+      - "%{repository} (%{commit}) : %{message} %{foo} "
+      - "Build details: %{build_url}"
 env:
   global:
     - Chart=ops
@@ -32,38 +35,39 @@ branches:
 before_install:
   # Expose MQ and DB to Docker container
   - openssl aes-256-cbc -K $encrypted_b1b613d8ff72_key -iv $encrypted_b1b613d8ff72_iv -in eh-test-44e7d0ea33e2.json.enc -out eh-test-44e7d0ea33e2.json -d
-  - sudo ./bin/ci/init-db.sh
+#  - sudo ./bin/ci/init-db.sh
 script:
   # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh
+ # - ./bin/ci/version-increment.sh
   # Install dependencies
-  - mix deps.get
+ # - mix deps.get
   # Run all tests except pending ones
-  - mix test --exclude pending --trace
+ # - mix test --exclude pending --trace
   # Submit code coverage report to Coveralls
   # Add --pro if you using private repo.
 #- mix coveralls.travis --exclude pending
   # Run static code analysis
-  - mix credo --strict
+ # - mix credo --strict
   # Check code style
-  - mix dogma
+ # - mix dogma
   # Build Docker container
-  - ./bin/build.sh
+ # - ./bin/build.sh
   # Initialize DB for Docker container
-  - MIX_ENV=dev mix ecto.setup
+ # - MIX_ENV=dev mix ecto.setup
   # Run Docker container
-  - sudo ./bin/start.sh
-  - sleep 5
-  - docker ps
-  - RUNNING_CONTAINERS=`docker ps | wc -l`;
-    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
-      echo "[E] Container is not started\!";
-      docker logs ops --details --since 5h;
-      exit 1;
-    fi;
+ # - sudo ./bin/start.sh
+ # - sleep 5
+ # - docker ps
+ # - RUNNING_CONTAINERS=`docker ps | wc -l`;
+ #   if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
+ #     echo "[E] Container is not started\!";
+ #     docker logs ops --details --since 5h;
+ #     exit 1;
+ #   fi;
   # Run acceptance tests on Docker container
-  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-  - sudo ./bin/ci/push.sh
+ # - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
+  - ./bin/ci/push.sh
+  - sudo ./bin/deploy.sh
 #after_failure:
  # - docker logs ops --details --since 5h
 #after_success:
