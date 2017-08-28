@@ -20,7 +20,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   git commit -m "Increment version [ci skip]";
 
   if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
-    ./bin/ci/release.sh -a $DOCKER_HUB_ACCOUNT2 -t $TRAVIS_BRANCH -l;
+    ./bin/ci/release.sh -a $DOCKER_HUB_ACCOUNT -t $TRAVIS_BRANCH -l;
       if [ "$?" -eq 0 ]; then
             exit 0;
           else 
